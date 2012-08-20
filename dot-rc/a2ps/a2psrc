@@ -1,0 +1,5 @@
+Options: --medium=A4
+#Options: --prologue=color
+Options: --chars-per-line=90
+Options: --underlay=$n
+Options: --line-numbers=5
