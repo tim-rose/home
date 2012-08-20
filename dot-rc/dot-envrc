@@ -76,8 +76,6 @@ addpath MANPATH /usr/local/mysql/man /usr/local/share/man
 addpath MANPATH /opt/local/share/man
 addpath MANPATH /usr/share/man /usr/man /usr/java/man
 
-export ENSCRIPT;			# see also: ~/.enscriptrc
-       ENSCRIPT="-L80 -U2 -G -C"
 export HOSTNAME;
        HOSTNAME=`uname -n`
 
@@ -110,13 +108,11 @@ export GREP_OPTIONS;
 export GREP_COLOR;
        GREP_COLOR=36
 
-test -d /usr/openwin && export OPENWINHOME; OPENWINHOME=/usr/openwin
-
-export PAGER;       PAGER=less
-#export SHELL;       SHELL=bash
-#export TERM;         TERM=xterm
-export TMPDIR;     TMPDIR="$HOME/tmp"
-export USER;         USER=${USER:-$LOGNAME}
+export PAGER;	PAGER=less
+#export SHELL;	SHELL=bash
+#export TERM;	TERM=xterm
+#export TMPDIR;	TMPDIR="$HOME/tmp"
+export USER;	USER=${USER:-$LOGNAME}
 #
 # X11 setups are mostly done from the .displayrc file, which contains
 # the prevailing values if a session is currently open, and doesn't
@@ -133,10 +129,10 @@ export WIRESHARK_APP_DIR;
 # development settings...
 #
 export prefix=/usr/local
-export DEVKIT_HOME=/usr/local
+export DEVKIT_HOME=
 export VCS=git
 
-export PERL5LIB=/usr/local/lib/perl5:/opt/ceos/lib/perl5
+export PERL5LIB=$prefix/lib/perl5
 
 # export CVSROOT=:ext:cvs:/home/CVS
 # export CVS_RSH=ssh
