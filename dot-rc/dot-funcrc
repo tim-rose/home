@@ -1,0 +1,21 @@
+#
+# define function/aliases...
+#
+window_title () { :; }
+env()	{ /usr/bin/env|sort; }
+dir()	{ command ls --color=auto -Fax $*; }
+ls()	{ command ls --color=auto $*; }
+path()  { eval "echo \${${1:-PATH}}" | tr ':' '\012';  }
+less4()	{ less -x4 $*; }
+mk()    { make -f $HOME/etc/makefile.mk "$@"; }
+
+find0() { find $* -print0; }
+#
+# calc() --Echo a calculation result.
+#
+calc() { echo "scale=2; $*" | bc; }
+#
+# maxlen() --Calculate the maximum line length of stdin
+#
+maxlen() { sed -e 's/./+1/g' -e 's/^/0/'| bc | sort -rn | head -1; }
+man() { window_title "%s manual page" "$1"; /usr/bin/man "$@"; }

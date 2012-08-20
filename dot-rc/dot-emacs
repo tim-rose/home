@@ -1,0 +1,212 @@
+;;
+;; .EMACS --setups for EMACS editor
+;;
+(setq custom-file "~/.emacs-custom.el")
+(load custom-file)
+
+;;
+;; REVISIT: see which of these are "customisable"...
+;;
+(setq load-path (cons "~/local/lib/emacs/site-lisp" load-path)
+      enable-backup		t	; auto-backup periodically
+      version-control		t	; generate numbered backup files
+      kept-new-versions		3	; keep four most recent
+      kept-old-versions		1	; Keep oldest (probably the original)
+      delete-old-versions	t	; Don't ask when cleaning up versions
+      transient-mark-mode	t	; show regions as a highlighted face
+      line-number-mode		t	; display line numbers in mode line
+      require-final-newline	t	; force files to end in a new-line
+      scroll-step		1
+      text-mode-hook 		'turn-on-auto-fill)
+
+(put 'eval-expression 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+(show-paren-mode)			; display (non)matching parentheses
+
+(require 'cperl-mode)
+(defalias 'perl-mode 'cperl-mode)
+(setq cperl-indent-level	4
+      cperl-continued-statement-offset 4
+      cperl-close-paren-offset -4
+      cperl-brace-offset	-4
+      cperl-label-offset	-4
+      cperl-indent-parens-as-block t)
+;; 
+;;(require 'dmacro)
+;;(dmacro-load "~/local/lib/emacs/c.dm")
+;;(setq auto-dmacro-alist (append '(("\\.h$" . dot-h)
+;;				  ("\\.c$" . dot-c))
+;;				auto-dmacro-alist))
+;
+; If Emacs is running in "window" mode (i.e. not a terminal),
+; we can customise a lot of display/presentation stuff.
+;
+(when window-system
+  (tool-bar-mode 0)
+  (setq default-frame-alist
+	(append '((foreground-color . "white")
+		  (background-color . "black")
+		  (cursor-color . "green"))
+		default-frame-alist))
+  (set-face-background 'region "slategrey")
+  (set-face-foreground 'highlight "black")
+  (set-face-background 'modeline "grey70")
+  (set-face-foreground 'modeline "black")
+  (mwheel-install)
+  (require 'avoid)			; make the pointer jump away
+  (mouse-avoidance-mode 'jump)
+					; font-lock setups...
+  (setq font-lock-maximum-decoration t)
+  (setq font-lock-face-attributes
+	'((font-lock-comment-face	"grey80" nil nil t)
+	  (font-lock-string-face	"LightSalmon")
+	  (font-lock-keyword-face	"LightSteelBlue" nil t)
+	  (font-lock-function-name-face	"LightSkyBlue")
+	  (font-lock-variable-name-face	"LightGoldenrod")
+	  (font-lock-type-face		"PaleGreen")
+	  ;;;(font-lock-reference-face	"Aquamarine")
+	  ))
+;;;
+  (font-lock-add-keywords
+   'c-mode
+   '(("\\<\\(REVISIT\\):"    1    font-lock-warning-face t)
+     ("\\<\\(TODO\\):"       1    font-lock-warning-face t)
+     ("\\(\\@module\\):"    1    font-lock-doc-face t)
+     ("\\(\\@func\\)"       1    font-lock-doc-face t)
+     ("\\(\\@param\\)"      1    font-lock-doc-face t)
+     ("\\(\\@return\\)"     1    font-lock-doc-face t)
+     ("\\(\\@var\\)"        1    font-lock-doc-face t)
+     ("\\(\\@field\\)"      1    font-lock-doc-face t)
+     ("\\(\\@type\\)"       1    font-lock-doc-face t)
+     ("\\(\\@see\\)"        1    font-lock-doc-face t)
+     ("\\(\\@author\\)"     1    font-lock-doc-face t)
+     ("\\(\\@link\\)"       1    font-lock-doc-face t)
+     ("\\(\\@version\\)"    1    font-lock-doc-face t)
+     ("\\(\\@since\\)"      1    font-lock-doc-face t)
+     ("\\(\\@docroot\\)"    1    font-lock-doc-face t)
+     ("\\(\\@deprecated\\)" 1    font-lock-doc-face t)))
+  (font-lock-add-keywords
+   'java-mode
+   '(("\\<\\(REVISIT\\):" 1 font-lock-warning-face t)
+     ("\\<\\(TODO\\):" 1 font-lock-warning-face t)))
+  (add-hook 'find-file-hooks 'turn-on-font-lock)
+
+;  (set-face-attribute			; adjust the "whole-expr" match face
+;   'paren-face-match-light nil
+;   :background "gray10")
+  (set-face-attribute			; customise cperl's uglier faces
+   'cperl-array-face nil
+   :background "black" :foreground "lightgoldenrod" :bold t)
+  (set-face-attribute
+   'cperl-hash-face nil
+   :background "black" :foreground "lightgoldenrod" :bold t))
+					; Magic text modes based on file patterns
+(setq auto-mode-alist 
+      (append '(("\\.txt$"       . text-mode) 
+		("^README$"      . text-mode)
+		("\\.sh\\.$"     . sh-mode) 
+		("\\.wiki$"      . text-mode)
+		("\\.doc$"       . nroff-mode)
+		("\\.nw$"        . latex-mode) 
+		("\\.t$"         . cperl-mode) 
+		("\\.cgi$"       . cperl-mode) 
+		("\\.xql$"       . sql-mode) 
+		("\\.htt$"       . html-mode)	; clearsilver template
+		("\\.cst$"       . css-mode)	; clearsilver template
+		("Shakefile"     .  makefile-mode))
+	      auto-mode-alist))
+
+;
+; Setups for C-mode.
+;
+(require 'cc-mode)
+(add-hook 'c-mode-common-hook 'c-mode-setups)
+(defun c-mode-setups ()
+  "Timmo's private C-mode setups"
+  (c-set-style "bsd")
+  (c-set-offset 'inline-open 0)		; needed for methods in java
+  (c-toggle-auto-hungry-state 1)
+  (setq comment-column 40
+	c-basic-offset  4
+	indent-tabs-mode nil
+	c-cleanup-list	'(scope-operator 
+			  empty-defun-braces
+			  defun-close-semi
+			  list-close-comma)))
+;
+; miscellaneous functions...
+;
+(defun insert-date () 
+  "Insert the current date into the buffer at point."
+  (interactive)
+  (insert
+    (concat
+      (substring (current-time-string) 0 11)
+      (substring (current-time-string) 20))))
+
+(defun scroll-down-1 ()
+  "Scroll down one line without changing point"
+  (interactive)
+  (scroll-down 1))
+
+(defun scroll-up-1 ()
+  "Scroll up one line without changing point"
+  (interactive)
+  (scroll-up 1))
+
+(defun toggle-tab-width ()
+  "Toggle the width of tab characters between 8 and 4"
+  (interactive)
+  (setq tab-width (- 12 tab-width))
+  (message "tab-width: %d spaces" tab-width)
+  (redraw-display))
+
+(defun swap-buffer ()
+  "Swap to the previous buffer without prompting (similar to vi's :e#)"
+  (interactive)
+  (switch-to-buffer ()))
+
+;
+; my own peculiar key bindings...
+;
+(global-set-key "\M-p"     'scroll-down-1)
+(global-set-key "\M-n"     'scroll-up-1)
+(global-set-key "\M-g"     'goto-line)
+(global-set-key "\M-o"     'overwrite-mode)
+(global-set-key "\C-x="    'what-line)
+(global-set-key "\C-x "    'just-one-space)
+(global-set-key "\M-#"     'insert-date)
+(global-set-key "\C-xc"    'capitalize-region)
+(global-set-key "\C-c\C-c" 'compile)
+(global-set-key "\C-c\C-g" 'grep)
+(global-set-key [C-%]	   'query-replace-regexp)
+(global-set-key [C-tab]    'toggle-tab-width)
+(global-set-key [f2]  	   'swap-buffer)
+(global-set-key [f3]  	   'font-lock-mode)
+(global-set-key [f5]       'latex-mode)
+(global-set-key [f6]       'c-mode)
+(global-set-key [f7]       'font-lock-fontify-buffer)
+(global-set-key [home]     'beginning-of-line)
+(global-set-key [end]      'end-of-line)
+;
+; Sun keypad keys... (those were the days, eh?)
+;
+;(global-set-key [f11] 'keyboard-quit)
+;(global-set-key [f12] 'yank-pop)
+;(global-set-key [f14] 'undo)
+;(global-set-key [f16] 'kill-ring-save)
+;(global-set-key [f17] 'find-file)
+;(global-set-key [f18] 'yank)
+;(global-set-key [f19] 'isearch-forward)
+;(global-set-key [f20] 'kill-region)
+
+(server-start)				; emacs client setup
+;
+; Print an amusing message.  Apart from entertainment value, this
+; provides a positive acknowledgment that the initialisation has
+; succeeded.
+;
+(with-output-to-temp-buffer "*scratch*" (print (yow)))
+(message "Yow!")
