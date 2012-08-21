@@ -5,25 +5,35 @@
 if [ ! "$PS1" ]; then
     return
 fi
-test -f /etc/bashrc && . /etc/bashrc
-test -z "$ENV_START" && . "$HOME/.envrc"
-test -f "$HOME/.ttyrc" && . "$HOME/.ttyrc"
-test -f "$HOME/.funcrc" && . "$HOME/.funcrc"
-
 umask 002
 set -o ignoreeof	# ignore <CTRL d>, use exit to terminate ksh
 set -o emacs		# Set up in-line edit
+HISTCONTROL=ignoreboth		# bash history control
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+test -f /etc/bashrc && . /etc/bashrc # REVISIT: is this needed?
+test -z "$ENV_START" && . "$HOME/.envrc"
+test -f "$HOME/.ttyrc" && . "$HOME/.ttyrc"
+test -f "$HOME/.funcrc" && . "$HOME/.funcrc"
 
 # 
 # Set main prompt.  Note, this prompt is syntactally a shell nop,
 # so complete lines can be selected and pasted for re-execution.
 #
-case `hostname` in
-    kyogen*)     fg=32;;	# green
-    zeno*)      fg=36;;	# cyan
-    *)		fg=33;;	# yellow
+if [ "$VCS" = "git" ]; then
+    vcs_prompt="\$(git branch 2>/dev/null|sed -ne '/^[*]/s/^[*] */:/p')"
+fi
+
+case $HOSTNAME in
+    joshu)    fg=32;;		# green: development
+    kyogen)   fg=32;;		# green
+    tutsplus) fg=36;;		# cyan: production
+    creattica) fg=36;;		# cyan: production
+    *)	      fg=33;;		# yellow: other
 esac
-case `id` in
+case $(id) in
     uid=0*)     fg=33; bg=41;;	# yellow/red
     *)		bg=;;	# unset...
 esac
@@ -34,7 +44,7 @@ else
 fi
 case "$TERM" in
     xterm*|rxvt*|dtterm*|cygwin)	# title-bar displays user+host+directory
-        PS1="\[\e]1;\h\a\e]2;\u@\h \w\a\]: [\[$mode\]\h\[\e[m\]]; "
+        PS1="\[\e]1;\h\a\e]2;\u@\h \w\a\]: [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
         PS2="\[\e[36m\]: > \[\e[;m\]"
 	window_title()
 	{
@@ -44,12 +54,21 @@ case "$TERM" in
 	} >/dev/tty
 	;;
     ansi|linux|vt[0-9]*)	# colourful prompt only
-        PS1=": [\[$mode\]\h\[\e[m\]]; "
+        PS1=": [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
         PS2="\[\e[36m\]: > \[\e[;m\]"
 	;;
     *)				# display hostname in prompt
-        PS1=': [\h]; '
+        PS1=': [\h$vcs_prompt]; '
 	PS2=': > '
 	;;
 esac
-#EOF
+
+cd .				# ...let RVM do its thing
+PATH=$PATH:$HOME/.rvm/bin	# Add RVM to PATH for scripting
+
+#
+# load host-specific rc file
+#
+if [ -f $HOME/$ENV-$HOSTNAME ]; then
+    . $HOME/$ENV-$HOSTNAME
+fi

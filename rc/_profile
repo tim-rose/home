@@ -2,14 +2,13 @@
 # PROFILE --Timmo's profile
 #
 #date "+.profile: %c"
-env=`basename $SHELL`
+env=$(basename $SHELL)
 env=.${env}rc
 ENV=${ENV:-$env}
 export ENV
-#test -f /sw/bin/init.sh  && . /sw/bin/init.sh	# fink setups
 test -f "$HOME/.envrc"     && . "$HOME/.envrc"	# environment setups
 test -f "$HOME/.ttyrc"     && . "$HOME/.ttyrc"	# tty setups
 test -f "$HOME/.displayrc" && . "$HOME/.displayrc"	# X11 setups
 
 test -f $ENV && . $ENV				# shell setups
-test -x "$HOME/bin/$OS/$ARCH/auntie" && auntie -r 1-7 -s -m "%a %b %e: "
+test -x "$HOME/bin/auntie" && auntie -r 1-7 -s -m "%a %b %e: "

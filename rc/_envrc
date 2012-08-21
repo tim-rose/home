@@ -1,33 +1,20 @@
 #!/bin/sh
 # .ENVRC --environment initialisation for sh(1) compatible shells
 #
-ENV_START=`date "+.envrc: %c"`; export ENV_START
+ENV_START=$(date "+.envrc: %c"); export ENV_START
 #echo $ENV_START
-#
-# The following SSH code may not be needed, but sshLogin seems flaky...
-#
-#ssh_pid=`ps -x|grep ssh-agent|grep -v grep|awk '{print $1;}'`
-#if [ -z "$ssh_pid" ]; then
-#    echo ".envrc: no ssh-agent"
-#    eval `ssh-agent`
-#    (
-#        echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK; export SSH_AUTH_SOCK"
-#        echo "SSH_AGENT_PID=$SSH_AGENT_PID; export SSH_AGENT_PID"
-#    ) > $HOME/.sshrc
-#    ssh-add </dev/null
-#else
-#    echo ".envrc: found ssh-agent: $ssh_pid"
-#    test -f $HOME/.sshrc && . $HOME/.sshrc
-#fi
+
 export ARCH;	
        ARCH=$(uname -m|sed -e "s/i.86/i386/")
-export OS=$(uname -s)
+export OS;
+       OS=$(uname -s | tr '[A-Z]' '[a-z]')
 #
 # addpath() --Selectively add entries to PATH 
 #
+# REVISIT: avoid multiple evals
 addpath() 
 {
-    pathvar=$1; shift
+    local pathvar=$1; shift
     for p in "$@"; do
         test -d "$p" && eval $pathvar='$'$pathvar:$p
     done
@@ -35,20 +22,15 @@ addpath()
 
 export PATH;
        PATH=.
-addpath PATH $HOME/bin $HOME/bin/$OS/$ARCH
-addpath PATH $HOME/local/bin $HOME/local/bin/$OS/$ARCH
+addpath PATH $HOME/bin $HOME/bin/$OS-$ARCH
+addpath PATH $HOME/local/bin $HOME/local/bin/$OS-$ARCH
 
-addpath PATH /usr/local/bin /usr/local/sbin /usr/local/bin/X11
-addpath PATH /usr/local/mysql/bin
-addpath PATH /opt/local/bin /opt/local/libexec/gnubin /opt/ceos/bin
-addpath PATH /bin /sbin /usr/bin /usr/sbin 
-addpath PATH /usr/X11R6/bin /etc /usr/etc
+addpath PATH /usr/local/*bin /opt/*/bin /*bin /usr/*bin
 
 addpath PATH /usr/java/bin /usr/local/java/bin
 
 addpath PATH /cygdrive/c/WINDOWS/system32 /cygdrive/c/WINDOWS /cygdrive/c/WINDOWS/system32/Wbem
-addpath PATH /usr/local/libexec /opt/ceos/libexec
-addpath PATH /usr/local/home/*/bin
+addpath PATH /usr/local/libexec /opt/*/libexec
 
 export PLAN9=/usr/local/plan9
 addpath PATH $PLAN9/bin
@@ -65,19 +47,17 @@ addpath LD_LIBRARY_PATH /opt/local/lib
 addpath LD_LIBRARY_PATH /usr/lib /usr/X11R6/lib 
 export CDPATH;     
        CDPATH=.
-addpath CDPATH ../ $HOME/Projects $HOME/Projects/ceos /usr/local/src
+addpath CDPATH ../ $HOME/Projects $HOME/github
 
 export MANPATH; 
        MANPATH=$HOME/man:$HOME/local/man:$HOME/local/share/man
 
-addpath MANPATH /opt/ceos/share/man /opt/share/man
-addpath MANPATH /usr/local/man /usr/local/teTeX/man
-addpath MANPATH /usr/local/mysql/man /usr/local/share/man 
-addpath MANPATH /opt/local/share/man
+addpath MANPATH /opt/*/share/man /opt/share/man
+addpath MANPATH /usr/local/man /usr/local/share/man /usr/local/*/man
 addpath MANPATH /usr/share/man /usr/man /usr/java/man
 
 export HOSTNAME;
-       HOSTNAME=`uname -n`
+       HOSTNAME=$(uname -n)
 
 export LESS;
        LESS=-MiR
@@ -89,15 +69,31 @@ if [ -x "$HOME/bin/lesspipe" ]; then
 fi
 #
 # Colour options for LS:
-# directory:	bold (which happens to use the "deep" colour)
-# symlink:	"deep" colour
-# FIFO, socket:	"deep" colour reverse video
-# executable:	"bright" colour
-# orphaned link, missing file:	underlined variation
-# backup files:	"pale" colour
+# directory           di=1         bold
+# symlink             ln=36        cyan
+# multiple hard links mh=4;36      underlined, cyan (not always supported...)
+# pipe                pi=32        yellow
+# socket              so=32
+# door                do=32
+# block device        bd=1;35      bold, magenta
+# char device         cd=1;35
+# orphaned symlink    or=5;36      blinking, cyan
+# setuid              su=35        magenta
+# setgid              sg=35
+# capability          ca=35
+# writable+sticky     tw=31;45     red/magenta
+# writable by others  ow=31        red
+# sticky              st=35        magenta
+# executable          ex=32        green
+#
+# backup files        *~=34        blue
 #
 export LS_COLORS;
-       LS_COLORS="di=1:ln=34:pi=44;37:so=44;37:ex=32:or=34;4:mi=4:*~=31"
+       LS_COLORS='di=1:ln=36:pi=32:so=32:do=32:bd=1;35:cd=1;35'
+       LS_COLORS="$LS_COLORS:or=4;36:su=35:sg=35:ca=35"
+       LS_COLORS="$LS_COLORS:tw=31;45:ow=31:st=35:ex=32"
+#       LS_COLORS="$LS_COLORS:*~=34:*.bak=34"
+       LS_COLORS="$LS_COLORS:*~=38;05;8:*.bak=38;05;8"
        LS_COLORS="$LS_COLORS:ec=\e[m"
 
 export LOG_COLORS;
@@ -106,13 +102,16 @@ export LOG_COLORS;
 export GREP_OPTIONS;
        GREP_OPTIONS=--color=auto
 export GREP_COLOR;
-       GREP_COLOR=36
+       GREP_COLOR=36		# cyan
 
 export PAGER;	PAGER=less
 #export SHELL;	SHELL=bash
 #export TERM;	TERM=xterm
 #export TMPDIR;	TMPDIR="$HOME/tmp"
 export USER;	USER=${USER:-$LOGNAME}
+if [ -f $HOME/tmp ]; then
+    export TMPDIR;     TMPDIR="$HOME/tmp"
+fi
 #
 # X11 setups are mostly done from the .displayrc file, which contains
 # the prevailing values if a session is currently open, and doesn't
@@ -129,7 +128,7 @@ export WIRESHARK_APP_DIR;
 # development settings...
 #
 export prefix=/usr/local
-export DEVKIT_HOME=
+export DEVKIT_HOME=/usr/local
 export VCS=git
 
 export PERL5LIB=$prefix/lib/perl5
@@ -143,5 +142,20 @@ export LCLIMPORTDIR=/usr/local/share/splint/imports
 
 export SVN_EDITOR=/usr/local/bin/svn-edit
 export SVN_ROOT=svn+ssh://zeno/home/tirtlnet/svn
-#export SVN_ROOT=http://fileserver:2178
-# EOF
+#export SVN_ROOT=svn+ssh://somehost/srv/svn
+export SVN_ROOT=file://$HOME/svn
+
+#
+# RVM: --Ruby Version Manager
+#
+export RVM_HOME=$HOME/.rvm
+if [ -s $RVM_HOME/scripts/rvm ] ; then
+    . $RVM_HOME/scripts/rvm
+fi
+
+#
+# .envrc-hostname: --per-host initialisation, if any.
+#
+if [ -f $HOME/.envrc-$HOSTNAME ] ; then
+    . $HOME/.envrc-$HOSTNAME
+fi
