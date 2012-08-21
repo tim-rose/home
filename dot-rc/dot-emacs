@@ -1,13 +1,13 @@
 ;;
 ;; .EMACS --setups for EMACS editor
 ;;
-(setq custom-file "~/.emacs-custom.el")
+(setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file)
 
 ;;
 ;; REVISIT: see which of these are "customisable"...
 ;;
-(setq load-path (cons "~/local/lib/emacs/site-lisp" load-path)
+(setq load-path (cons "~/emacs.d/site-lisp" load-path)
       enable-backup		t	; auto-backup periodically
       version-control		t	; generate numbered backup files
       kept-new-versions		3	; keep four most recent
@@ -25,6 +25,7 @@
 
 (show-paren-mode)			; display (non)matching parentheses
 
+(load-library "php-mode-improved")
 (require 'cperl-mode)
 (defalias 'perl-mode 'cperl-mode)
 (setq cperl-indent-level	4
@@ -108,11 +109,12 @@
 		("^README$"      . text-mode)
 		("\\.sh\\.$"     . sh-mode) 
 		("\\.wiki$"      . text-mode)
+		("\\.md$"      . text-mode)
 		("\\.doc$"       . nroff-mode)
 		("\\.nw$"        . latex-mode) 
 		("\\.t$"         . cperl-mode) 
 		("\\.cgi$"       . cperl-mode) 
-		("\\.xql$"       . sql-mode) 
+		("\\.php$"       . php-mode) 
 		("\\.htt$"       . html-mode)	; clearsilver template
 		("\\.cst$"       . css-mode)	; clearsilver template
 		("Shakefile"     .  makefile-mode))
@@ -135,6 +137,26 @@
 			  empty-defun-braces
 			  defun-close-semi
 			  list-close-comma)))
+
+(add-hook 'php-mode-hook 'php-mode-setups)
+(defun wordpress-php-mode-setups ()
+  "Custom PHP-mode setups for WordPress"
+  (c-set-style "bsd")
+  (setq tab-width 2)			; Derek uses 2-space tabs!
+  (c-toggle-auto-hungry-state 1)
+  (setq comment-column 40
+	c-basic-offset  2
+	indent-tabs-mode nil))
+
+(defun php-mode-setups ()
+  "Custom PHP-mode setups"
+  (c-set-style "bsd")
+  (setq tab-width 8)			; Derek uses 2-space tabs!
+  (c-toggle-auto-hungry-state 1)
+  (setq comment-column 40
+	c-basic-offset  4
+	indent-tabs-mode nil))
+
 ;
 ; miscellaneous functions...
 ;
