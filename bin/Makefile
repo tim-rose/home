@@ -3,8 +3,9 @@
 #
 LANG	= sh nroff
 prefix = $(HOME)
-SH_SRC = auto-ssh.sh choose.sh cmpmv.sh db.sh dbls.sh lesspipe.sh \
-    mergedir.sh rpmpan.sh svn-viewdiff.sh trash.sh whichis.sh
+SH_SRC = auto-ssh.sh choose.sh cmpmv.sh db.sh dbls.sh git-hist.sh \
+    git-sync.sh lesspipe.sh mergedir.sh rpmpan.sh \
+    svn-viewdiff.sh trash.sh whichis.sh
 
 include devkit.mk
 
