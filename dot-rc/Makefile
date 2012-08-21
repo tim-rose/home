@@ -2,20 +2,19 @@
 # Makefile --Build rules for "dot-rc", home-directory config files.
 #
 LANG	= sh
-DOT_SRC = dot-bashrc dot-emacs dot-envrc dot-funcrc dot-gitconfig \
-    dot-profile dot-vimrc
+RC_SRC = _bashrc _emacs _envrc _funcrc _gitconfig _profile _vimrc
 
 default: install
 
 include devkit.mk
 
-install:	$(DOT_SRC:dot-%=$(DESTDIR)/$(HOME)/.%)
+install:	$(RC_SRC:dot-%=$(DESTDIR)/$(HOME)/.%)
 
-$(DESTDIR)/$(HOME)/.%:	dot-%;		$(INSTALL_DATA)	$? $@
+$(DESTDIR)/$(HOME)/.%:	_%;		$(INSTALL_DATA)	$? $@
 
-src:	dot-rc-src
-.PHONY:	dot-rc-src
-dot-rc-src:	
+src:	rc-src
+.PHONY:	rc-src
+rc-src:	
 	@$(ECHO) "++ make[$@]@$$PWD"
-	@mk-filelist -qn DOT_SRC dot-*[a-z]
+	@mk-filelist -qn RC_SRC _*[a-z]
 

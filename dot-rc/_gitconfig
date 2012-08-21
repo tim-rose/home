@@ -1,0 +1,10 @@
+[user]
+name = Tim Rose
+email = tim.rose@acm.org
+
+[github]
+user = tim-rose
+token = 423d60f27d2dd2cf3b23d15a5daf9966
+
+[color]
+ui = auto
