@@ -169,10 +169,10 @@ int main(int argc, char *argv[])
     do {
         volatile double d1, d2, d3;
         printf("Double:\n");
-        benchmark("d1 = d2 + d3", d2=987654321;d3=123456789, d3=d1+d2);
-        benchmark("d1 = d2 - d3", d2=987654321;d3=123456789, d3=d1-d2);
-        benchmark("d1 = d2 * d3", d2=987654321;d3=123456789, d3=d1*d2);
-        benchmark("d1 = d2 / d3", d2=987654321;d3=123456789, d3=d1/d2);
+        benchmark("d1 = d2 + d3", d1=0;d2=987654321;d3=123456789, d3=d1+d2);
+        benchmark("d1 = d2 - d3", d1=0;d2=987654321;d3=123456789, d3=d1-d2);
+        benchmark("d1 = d2 * d3", d1=0;d2=987654321;d3=123456789, d3=d1*d2);
+        benchmark("d1 = d2 / d3", d1=0;d2=987654321;d3=123456789, d3=d1/d2);
     } while (0);
 #endif /* BENCH_DOUBLE */
 
@@ -240,8 +240,9 @@ int main(int argc, char *argv[])
         rewind(fp);
         benchmark("fputs(str, fp)", i1=0, fputs((char*)str1,fp));
         rewind(fp);
-        (void) sprintf(bm_title, "fgets(str, %lu, fp)", strlen((char*)str1));
-        benchmark(bm_title, i1=0, (void) fgets((char*)strbuf,43,fp));
+        (void) sprintf(bm_title, "fgets(str, %lu, fp)",
+                       (long unsigned) strlen((char*)str1));
+        benchmark(bm_title, i1=0, str1=fgets((char*)strbuf,43,fp));
         rewind(fp);
         benchmark("fprintf(fp, \"%d\\n\", i)",
                   i1=123456789, fprintf(fp,"%d\n",i1));
