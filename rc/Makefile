@@ -2,7 +2,7 @@
 # Makefile --Build rules for "dot-rc", home-directory config files.
 #
 LANG	= sh
-RC_SRC = _bashrc _emacs _envrc _funcrc _gitconfig _profile _vimrc
+RC_SRC = _bashrc _emacs _envrc _funcrc _gitignore _profile _vimrc
 
 default: install
 
