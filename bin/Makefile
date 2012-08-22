@@ -1,14 +1,25 @@
 #
 # Makefile --Build rules for "bin", personal commands etc.
 #
-LANG	= sh nroff c
+# Remarks:
+# "prefix" is set to (environment variable) HOME, so that the default
+# rules can be applied to install the scripts.  Unfortunately that
+# conflicts with libdir, which is also prefix-relative.  The upshot is
+# that this configuration complains about a non-existent library
+# directory (~/lib), and would need some special handling to find
+# prefix-installed libraries.  Maybe I should build the C stuff in a
+# subdir?
+#
 prefix = $(HOME)
+LANG	= sh nroff c
+CFLAGS	= -O0
+LDLIBS	= -lm
+
 SH_SRC = auto-ssh.sh choose.sh cmpmv.sh colortest.sh db.sh dbls.sh \
     git-hist.sh git-sync.sh lesspipe.sh mergedir.sh rpmpan.sh \
     svn-viewdiff.sh trash.sh whichis.sh
 C_MAIN_SRC = benchmark.c
 C_SRC = benchmark.c
-CFLAGS = -O0   # disable optimisations for benchmark 
 
 include devkit.mk
 
