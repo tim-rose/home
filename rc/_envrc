@@ -1,6 +1,8 @@
 #!/bin/sh
 # .ENVRC --environment initialisation for sh(1) compatible shells
 #
+# REVISIT: modernise export declarations.
+# 
 ENV_START=$(date "+.envrc: %c"); export ENV_START
 #echo $ENV_START
 
@@ -105,9 +107,7 @@ export GREP_COLOR;
        GREP_COLOR=36		# cyan
 
 export PAGER;	PAGER=less
-#export SHELL;	SHELL=bash
 #export TERM;	TERM=xterm
-#export TMPDIR;	TMPDIR="$HOME/tmp"
 export USER;	USER=${USER:-$LOGNAME}
 if [ -f $HOME/tmp ]; then
     export TMPDIR;     TMPDIR="$HOME/tmp"
@@ -141,7 +141,6 @@ export LARCH_PATH=/usr/local/share/splint/lib
 export LCLIMPORTDIR=/usr/local/share/splint/imports
 
 export SVN_EDITOR=/usr/local/bin/svn-edit
-export SVN_ROOT=svn+ssh://zeno/home/tirtlnet/svn
 #export SVN_ROOT=svn+ssh://somehost/srv/svn
 export SVN_ROOT=file://$HOME/svn
 

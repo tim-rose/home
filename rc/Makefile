@@ -8,12 +8,12 @@ default: install
 
 include devkit.mk
 
-install:	$(RC_SRC:dot-%=$(DESTDIR)/$(HOME)/.%)
+install:	$(RC_SRC:_%=$(DESTDIR)/$(HOME)/.%)
 
 $(DESTDIR)/$(HOME)/.%:	_%;		$(INSTALL_DATA)	$? $@
 
-src:	rc-src
 .PHONY:	rc-src
+src:	rc-src
 rc-src:	
 	@$(ECHO) "++ make[$@]@$$PWD"
 	@mk-filelist -qn RC_SRC _*[a-z]
