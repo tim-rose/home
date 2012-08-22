@@ -12,7 +12,7 @@
 #
 prefix = $(HOME)
 LANG	= sh nroff c
-CFLAGS	= -O0
+CFLAGS	= -O0 -DBENCH_DOUBLE
 LDLIBS	= -lm
 
 SH_SRC = auto-ssh.sh choose.sh cmpmv.sh colortest.sh db.sh dbls.sh \

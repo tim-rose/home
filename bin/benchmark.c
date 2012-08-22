@@ -1,8 +1,17 @@
 /*
  * BENCHMARK --Calculate benchmark statistics calculator.
+ * 
+ * Contents:
+ * bm_clock()   --Calculate the raw time of the last benchmark, in seconds.
+ * bm_begin()  --Benchmark loop prologue.
+ * bm_begin()  --Benchmark loop epilogue.
+ * benchmark() --Print the duration of a task, in nanoseconds.
+ * sum1()      --Return the sum of its (one!) argument.
+ * sum2()      --Return the sum of two values.
+ * sum3()      --Return the sum of three values.
+ * main()      --Run a bunch of benchmarks, and report the results.
  *
  * Remarks:
- * 
  * This program uses a bunch of hairy macros to run some typical-use
  * operations enough times to estimate the performance of the
  * processor/system.
@@ -14,17 +23,6 @@
  * The Practice of Programming
  * Kernighan, Pike.
  * Addison Wesley (c) 1999
- * 
- * Routines:
- * bm_clock()   --Calculate the raw time of the last benchmark, in seconds.
- * bm_begin()  --Benchmark loop prologue.
- * bm_begin()  --Benchmark loop epilogue.
- * benchmark() --Print the duration of a task, in nanoseconds.
- * sum1()      --Return the sum of its (one!) argument.
- * sum2()      --Return the sum of two values.
- * sum3()      --Return the sum of three values.
- * main()      --Run a bunch of benchmarks, and report the results.
- *
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -146,7 +144,6 @@ int main(int argc, char *argv[])
 {
     volatile int i1, i2, i3;
     volatile float f1, f2, f3;
-    volatile double d1, d2, d3;
     volatile char *str1, *str2, *str3;
     volatile char strbuf[1024];
     volatile int v[100] = {0};
@@ -169,11 +166,14 @@ int main(int argc, char *argv[])
     benchmark("f1 = f2 / f3", f2=987654321;f3=123456789, f3=f1/f2);
 
 #ifdef BENCH_DOUBLE
-    printf("Double:\n");
-    benchmark("d1 = d2 + d3", d2=987654321;d3=123456789, d3=d1+d2);
-    benchmark("d1 = d2 - d3", d2=987654321;d3=123456789, d3=d1-d2);
-    benchmark("d1 = d2 * d3", d2=987654321;d3=123456789, d3=d1*d2);
-    benchmark("d1 = d2 / d3", d2=987654321;d3=123456789, d3=d1/d2);
+    do {
+        volatile double d1, d2, d3;
+        printf("Double:\n");
+        benchmark("d1 = d2 + d3", d2=987654321;d3=123456789, d3=d1+d2);
+        benchmark("d1 = d2 - d3", d2=987654321;d3=123456789, d3=d1-d2);
+        benchmark("d1 = d2 * d3", d2=987654321;d3=123456789, d3=d1*d2);
+        benchmark("d1 = d2 / d3", d2=987654321;d3=123456789, d3=d1/d2);
+    } while (0);
 #endif /* BENCH_DOUBLE */
 
     printf("Numeric Conversions:\n");
@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
         benchmark("fputs(str, fp)", i1=0, fputs((char*)str1,fp));
         rewind(fp);
         (void) sprintf(bm_title, "fgets(str, %lu, fp)", strlen((char*)str1));
-        benchmark(bm_title, i1=0, fgets((char*)strbuf,43,fp));
+        benchmark(bm_title, i1=0, (void) fgets((char*)strbuf,43,fp));
         rewind(fp);
         benchmark("fprintf(fp, \"%d\\n\", i)",
                   i1=123456789, fprintf(fp,"%d\n",i1));
