@@ -1,5 +1,12 @@
-Options: --medium=A4
-#Options: --prologue=color
+#
+# A2PSRC --Customisations for a2ps.
+#
+Options: --line-numbers=5 
 Options: --chars-per-line=90
 Options: --underlay=$n
-Options: --line-numbers=5
+Options: --footer=$f
+Options: --medium=A4Mac
+
+Medium: A4std 595 842
+Medium: A4full 595 795 0 0 595 795
+Medium: A4Mac 595 795
