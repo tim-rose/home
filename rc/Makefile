@@ -17,3 +17,9 @@ rc-src:
 	@$(ECHO) "++ make[$@]@$$PWD"
 	@mk-filelist -qn RC_SRC _*[a-z]
 
+.PHONY:	rc-toc
+toc:	rc-toc
+rc-toc:
+	@$(ECHO) "++ make[$@]@$$PWD"
+	@mk-toc -qt .sh  $(RC_SRC)
+
