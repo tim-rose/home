@@ -61,7 +61,7 @@ export PATH;
 PATH=$(prepend_path $PATH \
     . $HOME/bin $HOME/bin/$OS-$ARCH \
     $HOME/local/bin $HOME/local/bin/$OS-$ARCH \
-    /usr/local/*bin /opt/*/bin /*bin /usr/*bin\
+    /usr/local/*bin /opt/local/libexec/gnubin /opt/*/bin /*bin /usr/*bin\
     $HOME/local/libexec /usr/local/libexec /opt/*/libexec)
 
 export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
