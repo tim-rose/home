@@ -64,7 +64,6 @@ case "$TERM" in
 esac
 
 cd .				# ...let RVM do its thing
-PATH=$PATH:$HOME/.rvm/bin	# Add RVM to PATH for scripting
 
 #
 # load host-specific rc file

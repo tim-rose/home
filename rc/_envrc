@@ -147,9 +147,9 @@ export SVN_ROOT=file://$HOME/svn
 #
 # RVM: --Ruby Version Manager
 #
-export RVM_HOME=$HOME/.rvm
-if [ -s $RVM_HOME/scripts/rvm ] ; then
-    . $RVM_HOME/scripts/rvm
+if [ "$rvm_bin_path" ] ; then
+    addpath PATH $rvm_bin_path
+#     . $rvm_path/scripts/rvm
 fi
 
 #
