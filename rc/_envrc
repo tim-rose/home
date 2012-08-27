@@ -3,8 +3,11 @@
 #
 # Contents:
 # dirs_not_in_path() --Return a path-spec of "new" path elements.
-# merge_path()       --Merge two path-spec.s as a ":" separated list.
+# prepend_path()     --Merge two path-spec.s as a ":" separated list.
+# less:              --Settings for paginated output.
+# ls:                --Colour options for listing files and directoriesl
 # RVM:               --Ruby Version Manager
+# .displayrc:        --X11 environment configuration, if any.
 # .envrc-hostname:   --per-host initialisation, if any.
 # 
 export ENV_START=$(date "+.envrc: %c")
