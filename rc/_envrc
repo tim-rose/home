@@ -1,76 +1,95 @@
 #!/bin/sh
 # .ENVRC --environment initialisation for sh(1) compatible shells
 #
-# REVISIT: modernise export declarations.
+# Contents:
+# dirs_not_in_path() --Return a path-spec of "new" path elements.
+# merge_path()       --Merge two path-spec.s as a ":" separated list.
+# RVM:               --Ruby Version Manager
+# .envrc-hostname:   --per-host initialisation, if any.
 # 
-ENV_START=$(date "+.envrc: %c"); export ENV_START
-#echo $ENV_START
+export ENV_START=$(date "+.envrc: %c")
+#echo $ENV_START >&2
 
-export ARCH;	
-       ARCH=$(uname -m|sed -e "s/i.86/i386/")
-export OS;
-       OS=$(uname -s | tr '[A-Z]' '[a-z]')
+export HOSTNAME=$(uname -n)
+export ARCH=$(uname -m|sed -e "s/i.86/i386/")
+export OS=$(uname -s | tr '[A-Z]' '[a-z]')
+export USER=${USER:-$LOGNAME}
+if [ -f $HOME/tmp ]; then
+    export TMPDIR;     TMPDIR="$HOME/tmp"
+fi
+
 #
-# addpath() --Selectively add entries to PATH 
+# dirs_not_in_path() --Return a path-spec of "new" path elements.
 #
-# REVISIT: avoid multiple evals
-addpath() 
+dirs_not_in_path() 
 {
-    local pathvar=$1; shift
-    for p in "$@"; do
-        test -d "$p" && eval $pathvar='$'$pathvar:$p
-    done
+    local path=$1; shift
+    for dir in "$@"; do
+	case "$path" in
+	$dir:*)		;;		# already at start of path
+	*:$dir:*)	;;		# already in the middle of path
+	*:$dir)		;;		# already at the end of path
+	*)
+	    if [ -d "$dir" ]; then
+		echo $dir
+	    fi
+	    ;;
+	esac
+    done |
+    {					# echo ":" separated list of items
+	read d && printf '%s' "$d"
+	while read d; do
+	    printf ':%s' "$d"
+	done
+    }
+}
+
+#
+# prepend_path() --Merge two path-spec.s as a ":" separated list.
+#
+prepend_path()
+{
+    local prefix=$(dirs_not_in_path "$@")
+    if [ "$1" -a "$prefix" ]; then
+	echo "$prefix:$1"
+    elif [ "$1" -o "$prefix" ]; then
+	echo "$prefix:$1"
+    fi
 }
 
 export PATH;
-       PATH=.
-addpath PATH $HOME/bin $HOME/bin/$OS-$ARCH
-addpath PATH $HOME/local/bin $HOME/local/bin/$OS-$ARCH
+PATH=$(prepend_path $PATH \
+    . $HOME/bin $HOME/bin/$OS-$ARCH \
+    $HOME/local/bin $HOME/local/bin/$OS-$ARCH \
+    /usr/local/*bin /opt/*/bin /*bin /usr/*bin\
+    $HOME/local/libexec /usr/local/libexec /opt/*/libexec)
 
-addpath PATH /usr/local/*bin /opt/*/bin /*bin /usr/*bin
+export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
+    $HOME/local/lib /usr/local/lib /opt/local/lib \
+    /usr/lib /usr/X11R6/lib )
 
-addpath PATH /usr/java/bin /usr/local/java/bin
+export CDPATH=$(prepend_path "$CDPATH" . .. $HOME/Projects $HOME/github)
 
-addpath PATH /cygdrive/c/WINDOWS/system32 /cygdrive/c/WINDOWS /cygdrive/c/WINDOWS/system32/Wbem
-addpath PATH /usr/local/libexec /opt/*/libexec
-
-export PLAN9=/usr/local/plan9
-addpath PATH $PLAN9/bin
-
-export CC;
-       CC=gcc
-export EDITOR;
-    EDITOR=vi
+export MANPATH=$(prepend_path "$MANPATH" \
+    $HOME/local/man:$HOME/local/share/man \
+    usr/local/man /usr/local/share/man /usr/local/*/man \
+    /opt/*/share/man /opt/share/man \
+    /usr/*/man /usr/man)
 
 unset LANG
-export LD_LIBRARY_PATH;
-       LD_LIBRARY_PATH=$HOME/local/lib:/usr/local/lib;
-addpath LD_LIBRARY_PATH /opt/local/lib
-addpath LD_LIBRARY_PATH /usr/lib /usr/X11R6/lib 
-export CDPATH;     
-       CDPATH=.
-addpath CDPATH ../ $HOME/Projects $HOME/github
 
-export MANPATH; 
-       MANPATH=$HOME/man:$HOME/local/man:$HOME/local/share/man
-
-addpath MANPATH /opt/*/share/man /opt/share/man
-addpath MANPATH /usr/local/man /usr/local/share/man /usr/local/*/man
-addpath MANPATH /usr/share/man /usr/man /usr/java/man
-
-export HOSTNAME;
-       HOSTNAME=$(uname -n)
-
-export LESS;
-       LESS=-MiR
-export LESSCHARSET
-       LESSCHARSET=latin1
-if [ -x "$HOME/bin/lesspipe" ]; then
-    export LESSOPEN
-           LESSOPEN="|$HOME/bin/lesspipe %s"
-fi
 #
-# Colour options for LS:
+# less: --Settings for paginated output.
+#
+export LESS=-MiR
+export LESSCHARSET=latin1
+if [ -x "$HOME/bin/lesspipe" ]; then
+    export LESSOPEN="|$HOME/bin/lesspipe %s"
+fi
+
+#
+# ls: --Colour options for listing files and directoriesl
+# 
 # directory           di=1         bold
 # symlink             ln=36        cyan
 # multiple hard links mh=4;36      underlined, cyan (not always supported...)
@@ -90,50 +109,32 @@ fi
 #
 # backup files        *~=34        blue
 #
-export LS_COLORS;
-       LS_COLORS='di=1:ln=36:pi=32:so=32:do=32:bd=1;35:cd=1;35'
+export LS_COLORS='di=1:ln=36:pi=32:so=32:do=32:bd=1;35:cd=1;35'
        LS_COLORS="$LS_COLORS:or=4;36:su=35:sg=35:ca=35"
        LS_COLORS="$LS_COLORS:tw=31;45:ow=31:st=35:ex=32"
 #       LS_COLORS="$LS_COLORS:*~=34:*.bak=34"
        LS_COLORS="$LS_COLORS:*~=38;05;8:*.bak=38;05;8"
        LS_COLORS="$LS_COLORS:ec=\e[m"
 
-export LOG_COLORS;
-       LOG_COLORS='debug=36:notice=1:warning=1;33:err=1;31:crit=1;33;41:alert=1;5;33;41:emerg=1;5;37;41'
+export LOG_COLORS='debug=36:notice=1:warning=1;33:err=1;31:crit=1;33;41:alert=1;5;33;41:emerg=1;5;37;41'
 
-export GREP_OPTIONS;
-       GREP_OPTIONS=--color=auto
-export GREP_COLOR;
-       GREP_COLOR=36		# cyan
+export EDITOR=vi
+export GREP_OPTIONS=--color=auto
+export GREP_COLOR=36		# cyan
 
-export PAGER;	PAGER=less
-#export TERM;	TERM=xterm
-export USER;	USER=${USER:-$LOGNAME}
-if [ -f $HOME/tmp ]; then
-    export TMPDIR;     TMPDIR="$HOME/tmp"
-fi
-#
-# X11 setups are mostly done from the .displayrc file, which contains
-# the prevailing values if a session is currently open, and doesn't
-# exist when there is no current X11 session.
-#
-test -f "$HOME/.displayrc" && . "$HOME/.displayrc"
-export XFILESEARCHPATH;
-XFILESEARCHPATH="$HOME/lib/X11/1024x768/%N:/usr/X11R6/lib/X11/%T/%N"
+export PAGER=less
 
-export WIRESHARK_APP_DIR;
-       WIRESHARK_APP_DIR=/Applications/Extras
+export WIRESHARK_APP_DIR=/Applications/Extras
 
 #
 # development settings...
 #
+export CC=gcc
 export prefix=/usr/local
 export DEVKIT_HOME=/usr/local
 export VCS=git
-
 export PERL5LIB=$prefix/lib/perl5
-
-# export CVSROOT=:ext:cvs:/home/CVS
+# export CVSROOT=:ext:cvs:/home/CVS	# CVS: those were the days, huh?
 # export CVS_RSH=ssh
 export RSYNC_RSH=ssh
 
@@ -147,10 +148,24 @@ export SVN_ROOT=file://$HOME/svn
 #
 # RVM: --Ruby Version Manager
 #
+# REVISIT: is this needed?
+#
 if [ "$rvm_bin_path" ] ; then
-    addpath PATH $rvm_bin_path
+    PATH="$PATH:$rvm_bin_path"
 #     . $rvm_path/scripts/rvm
 fi
+
+#
+# .displayrc: --X11 environment configuration, if any.
+# 
+# X11 setups are mostly done from the .displayrc file, which contains
+# the prevailing values if a session is currently open, and doesn't
+# exist when there is no current X11 session.
+#
+if [ -f "$HOME/.displayrc" ]; then
+    . "$HOME/.displayrc"
+fi
+export XFILESEARCHPATH="$HOME/lib/X11/1024x768/%N:/usr/X11R6/lib/X11/%T/%N"
 
 #
 # .envrc-hostname: --per-host initialisation, if any.
