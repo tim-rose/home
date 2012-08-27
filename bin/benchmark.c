@@ -149,6 +149,7 @@ int main(int argc, char *argv[])
     volatile int v[100] = {0};
     FILE *fp;
 
+    argv[argc] = argv[argc];    /* placate gcc unused warnings */
     printf("%-35s %10s %10s\n", "Benchmark", "clock", "timeofday");
     
     printf("Integer:\n");
