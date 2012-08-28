@@ -11,6 +11,6 @@ installdirs:	$(TRG_DIR)
 install:	$(SRC:%=$(TRG_DIR)/%)
 
 $(TRG_DIR):	;		$(INSTALL_DIRECTORY) $? $@
-$(TRG_DIR)/%:	%;		$(INSTALL_DATA)	$? $@
+$(TRG_DIR)/%:	%;		$(INSTALL_FILE)	$? $@
 
 

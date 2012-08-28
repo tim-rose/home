@@ -9,7 +9,7 @@ include devkit.mk
 
 install:	$(RC_SRC:_%=$(DESTDIR)/$(HOME)/.%)
 
-$(DESTDIR)/$(HOME)/.%:	_%;		$(INSTALL_DATA)	$? $@
+$(DESTDIR)/$(HOME)/.%:	_%;		$(INSTALL_FILE)	$? $@
 
 src:
 	mk-filelist -qn RC_SRC _*[a-z]
