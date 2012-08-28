@@ -3,7 +3,7 @@
 #
 LISP_SRC = php-mode-improved.el
 TRG_DIR = $(DESTDIR)/$(HOME)/.emacs.d/site-lisp
-LANG = lisp
+SRC_LANG = lisp
 
 include devkit.mk
 

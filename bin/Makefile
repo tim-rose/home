@@ -11,7 +11,7 @@
 # subdir?
 #
 prefix = $(HOME)
-LANG	= sh nroff c
+SRC_LANG	= sh nroff c
 CFLAGS	= -O0 -DBENCH_DOUBLE
 LDLIBS	= -lm
 
