@@ -149,16 +149,6 @@ export SVN_EDITOR=/usr/local/bin/svn-edit
 export SVN_ROOT=file://$HOME/svn
 
 #
-# RVM: --Ruby Version Manager
-#
-# REVISIT: is this needed?
-#
-if [ "$rvm_bin_path" ] ; then
-    PATH="$PATH:$rvm_bin_path"
-#     . $rvm_path/scripts/rvm
-fi
-
-#
 # .displayrc: --X11 environment configuration, if any.
 # 
 # X11 setups are mostly done from the .displayrc file, which contains
