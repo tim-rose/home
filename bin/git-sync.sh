@@ -4,8 +4,8 @@
 #
 set -e			       # fail immediately if there's a problem
 PATH=$PATH:/usr/libexec:/usr/local/libexec
-. getopt.shl
-. log.shl
+. core.shl
+require getopt.shl log.shl
 
 stash=
 tmpfile=$(mktemp -t vcs-XXXXXX)

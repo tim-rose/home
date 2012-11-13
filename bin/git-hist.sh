@@ -3,8 +3,8 @@
 # GIT-HIST --Customised version of git log that shows a colourful graph.
 #
 PATH=$PATH:/usr/libexec:/usr/local/libexec
-. getopt.shl
-. log.shl
+. core.shl
+require getopt.shl log.shl
 
 #
 # usage() --echo this script's usage message.
