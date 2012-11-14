@@ -29,14 +29,13 @@ log_getopts
 #
 # main...
 #
-info 'fetching upstream changes'
-git fetch
+notice 'fetching upstream changes'
+log_cmd git fetch
 
 branch=$(git describe --contains --all HEAD)
 if [ ! "$(git config branch.$branch.remote)" \
     -o ! "$(git config branch.$branch.merge)" ]; then
-    err '"%s" is not a tracking branch' $branch
-    exit 1
+    log_quit '"%s" is not a tracking branch' $branch
 fi
 
 #
@@ -44,15 +43,14 @@ fi
 # 
 if git status | grep "# Your branch" > "$tmpfile"; then
 
-    info 'updating upstream changes'
+    notice 'updating upstream changes'
     # extract tracking branch from status message
     upstream=$(cat "$tmpfile" | cut -d "'" -f 2)
     if [ ! "$upstream" ]; then
-        err 'Could not detect upstream branch'
-        exit 1
+        log_quit 'Could not detect upstream branch'
     fi
     
-    git stash > "$tmpfile" || exit 1
+    log_cmd git stash > "$tmpfile" || exit 1
     
     if ! grep -q "No local changes" "$tmpfile"; then
 	info 'stashed local changes'
@@ -62,10 +60,10 @@ if git status | grep "# Your branch" > "$tmpfile"; then
     #
     # rebase our changes on top of upstream, but keep any merges
     # 
-    git rebase -p "$upstream"
+    log_cmd git rebase -p "$upstream"
     
     if [ "$stash" ]; then
 	info 'restoring local changes'
-	git stash pop -q		# restore what we stashed earlier
+	log_cmd git stash pop -q		# restore what we stashed earlier
     fi
 fi
