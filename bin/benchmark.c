@@ -3,13 +3,15 @@
  * 
  * Contents:
  * bm_clock()   --Calculate the raw time of the last benchmark, in seconds.
- * bm_begin()  --Benchmark loop prologue.
- * bm_begin()  --Benchmark loop epilogue.
- * benchmark() --Print the duration of a task, in nanoseconds.
- * sum1()      --Return the sum of its (one!) argument.
- * sum2()      --Return the sum of two values.
- * sum3()      --Return the sum of three values.
- * main()      --Run a bunch of benchmarks, and report the results.
+ * bm_timeval() --Calculate the raw time of the last benchmark, in seconds.
+ * bm_do_*()    --Repeatedly do some task as a statement sequence.
+ * bm_begin()   --Benchmark loop prologue.
+ * bm_begin()   --Benchmark loop epilogue.
+ * benchmark()  --Print the duration of a task, in nanoseconds.
+ * sum1()       --Return the sum of its (one!) argument.
+ * sum2()       --Return the sum of two values.
+ * sum3()       --Return the sum of three values.
+ * main()       --Run a bunch of benchmarks, and report the results.
  *
  * Remarks:
  * This program uses a bunch of hairy macros to run some typical-use
