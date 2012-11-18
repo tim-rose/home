@@ -17,7 +17,8 @@ LDLIBS	= -lm
 
 SH_SRC = auto-ssh.sh choose.sh cmpmv.sh colortest.sh db.sh dbls.sh \
     git-hist.sh git-sync.sh lesspipe.sh mergedir.sh rpmpan.sh \
-    svn-viewdiff.sh trash.sh whichis.sh
+    set-font-smoothing.sh svn-viewdiff.sh trash.sh whichis.sh
+SED_SRC = csv-to-html.sed
 C_MAIN_SRC = benchmark.c
 C_SRC = benchmark.c
 
@@ -27,4 +28,5 @@ installdirs:	$(man1dir) $(bindir)
 install:	$(MAN1_SRC:%.1=$(man1dir)/%.1)
 install:	$(SH_SRC:%.sh=$(bindir)/%)
 install:	$(SHL_SRC:%=$(libexecdir)/%)
+install:	$(SED_SRC:%.sed=$(bindir)/%)
 install:	$(C_MAIN_SRC:%.c=$(bindir)/%)
