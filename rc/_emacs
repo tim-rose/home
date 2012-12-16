@@ -25,6 +25,8 @@
 
 (show-paren-mode)			; display (non)matching parentheses
 
+(autoload 'markdown-mode "markdown-mode.el"
+  "Major mode for editing Markdown files" t) 
 (load-library "php-mode-improved")
 (require 'cperl-mode)
 (defalias 'perl-mode 'cperl-mode)
@@ -105,19 +107,17 @@
    :background "black" :foreground "lightgoldenrod" :bold t))
 					; Magic text modes based on file patterns
 (setq auto-mode-alist 
-      (append '(("\\.txt$"       . text-mode) 
-		("^README$"      . text-mode)
-		("\\.sh\\.$"     . sh-mode) 
-		("\\.wiki$"      . text-mode)
-		("\\.md$"      . text-mode)
-		("\\.doc$"       . nroff-mode)
-		("\\.nw$"        . latex-mode) 
-		("\\.t$"         . cperl-mode) 
-		("\\.cgi$"       . cperl-mode) 
-		("\\.php$"       . php-mode) 
-		("\\.htt$"       . html-mode)	; clearsilver template
-		("\\.cst$"       . css-mode)	; clearsilver template
-		("Shakefile"     .  makefile-mode))
+      (append '(("\\.txt$"	. text-mode) 
+		("^README$"	. text-mode)
+		("\\.shl$"	. sh-mode) 
+		("\\.wiki$"	. text-mode)
+		("\\.md$"	. markdown-mode)
+		("\\.doc$"	. nroff-mode)
+		("\\.nw$"	. latex-mode) 
+		("\\.t$"	. cperl-mode) 
+		("\\.cgi$"	. cperl-mode) 
+		("\\.php$"	. php-mode) 
+		("\\.mk$"	.  makefile-mode))
 	      auto-mode-alist))
 
 ;
