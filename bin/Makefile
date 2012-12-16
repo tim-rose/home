@@ -15,9 +15,9 @@ SRC_LANG	= sh nroff c
 CFLAGS	= -O0 -DBENCH_DOUBLE
 LDLIBS	= -lm
 
-SH_SRC = auto-ssh.sh choose.sh cmpmv.sh colortest.sh db.sh \
-    dbls.sh git-blend.sh lesspipe.sh mergedir.sh rpmpan.sh \
-    set-font-smoothing.sh svn-viewdiff.sh trash.sh whichis.sh
+SH_SRC = auto-ssh.sh choose.sh cmpmv.sh colortest.sh db.sh dbls.sh \
+    lesspipe.sh mergedir.sh rpmpan.sh set-font-smoothing.sh \
+    svn-viewdiff.sh trash.sh whichis.sh
 SED_SRC = csv-to-html.sed
 C_MAIN_SRC = benchmark.c
 C_SRC = benchmark.c
