@@ -22,9 +22,10 @@
 (put 'eval-expression 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (show-paren-mode)			; display (non)matching parentheses
-
+(column-number-mode)			; display detailed row+column info
 (autoload 'markdown-mode "markdown-mode.el"
   "Major mode for editing Markdown files" t) 
 (load-library "php-mode-improved")
@@ -36,7 +37,7 @@
       cperl-brace-offset	-4
       cperl-label-offset	-4
       cperl-indent-parens-as-block t)
-;; 
+;;
 ;;(require 'dmacro)
 ;;(dmacro-load "~/local/lib/emacs/c.dm")
 ;;(setq auto-dmacro-alist (append '(("\\.h$" . dot-h)
@@ -106,17 +107,19 @@
    'cperl-hash-face nil
    :background "black" :foreground "lightgoldenrod" :bold t))
 					; Magic text modes based on file patterns
-(setq auto-mode-alist 
-      (append '(("\\.txt$"	. text-mode) 
+(setq auto-mode-alist
+      (append '(("\\.txt$"	. text-mode)
 		("^README$"	. text-mode)
-		("\\.shl$"	. sh-mode) 
+		("\\.shl$"	. sh-mode)
 		("\\.wiki$"	. text-mode)
 		("\\.md$"	. markdown-mode)
 		("\\.doc$"	. nroff-mode)
-		("\\.nw$"	. latex-mode) 
-		("\\.t$"	. cperl-mode) 
-		("\\.cgi$"	. cperl-mode) 
-		("\\.php$"	. php-mode) 
+		("\\.nw$"	. latex-mode)
+		("\\.t$"	. cperl-mode)
+		("\\.cgi$"	. cperl-mode)
+		("\\.gemspec$"	. ruby-mode)
+		("^Rakefile$"	. ruby-mode)
+		("\\.php$"	. php-mode)
 		("\\.mk$"	.  makefile-mode))
 	      auto-mode-alist))
 
@@ -133,7 +136,7 @@
   (setq comment-column 40
 	c-basic-offset  4
 	indent-tabs-mode nil
-	c-cleanup-list	'(scope-operator 
+	c-cleanup-list	'(scope-operator
 			  empty-defun-braces
 			  defun-close-semi
 			  list-close-comma)))
@@ -160,7 +163,7 @@
 ;
 ; miscellaneous functions...
 ;
-(defun insert-date () 
+(defun insert-date ()
   "Insert the current date into the buffer at point."
   (interactive)
   (insert
