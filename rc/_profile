@@ -10,5 +10,5 @@ test -f "$HOME/.envrc"     && . "$HOME/.envrc"	# environment setups
 test -f "$HOME/.ttyrc"     && . "$HOME/.ttyrc"	# tty setups
 test -f "$HOME/.displayrc" && . "$HOME/.displayrc"	# X11 setups
 
-test -f $ENV && . $ENV				# shell setups
+test -f $HOME/$ENV && . $HOME/$ENV # shell setups
 test -x "$HOME/bin/auntie" && auntie -r 1-7 -s -m "%a %b %e: "
