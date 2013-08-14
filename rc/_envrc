@@ -6,7 +6,6 @@
 # prepend_path()     --Merge two path-spec.s as a ":" separated list.
 # less:              --Settings for paginated output.
 # ls:                --Colour options for listing files and directoriesl
-# RVM:               --Ruby Version Manager
 # .displayrc:        --X11 environment configuration, if any.
 # .envrc-hostname:   --per-host initialisation, if any.
 # 
@@ -64,7 +63,8 @@ export PATH;
 PATH=$(prepend_path $PATH \
     . $HOME/bin $HOME/bin/$OS-$ARCH \
     $HOME/local/bin $HOME/local/bin/$OS-$ARCH \
-    /usr/local/*bin /opt/local/libexec/gnubin /opt/*/bin /*bin /usr/*bin\
+    /usr/local/*bin /usr/local/opt/coreutils/libexec/gnubin \
+    /opt/local/libexec/gnubin /opt/*/bin /*bin /usr/*bin\
     $HOME/local/libexec /usr/local/libexec /opt/*/libexec)
 
 export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
@@ -76,10 +76,9 @@ export CDPATH=$(prepend_path "$CDPATH" . .. $HOME/Projects $HOME/github)
 export MANPATH=$(prepend_path "$MANPATH" \
     $HOME/local/man:$HOME/local/share/man \
     usr/local/man /usr/local/share/man /usr/local/*/man \
+     /usr/local/opt/coreutils/libexec/gnuman \
     /opt/*/share/man /opt/share/man \
     /usr/*/man /usr/man)
-
-unset LANG
 
 #
 # less: --Settings for paginated output.
