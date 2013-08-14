@@ -32,3 +32,7 @@ man() { window_title "%s manual page" "$1"; /usr/bin/man "$@"; }
 log_count() {
  watch "tail -10000 ${1:-/var/log/nginx/tutsplus.com.proxy.log}|cut -d' ' -f1 |sort |uniq -c|sort -n|tail -30"
 }
+#
+# tgrep() --"table" grep; print the first (header) line, and matching others.
+#
+tgrep() { local tag=$1; shift; cat $* |sed -ne1p -e "/$tag/p"; }
