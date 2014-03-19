@@ -27,7 +27,7 @@
 (show-paren-mode)			; display (non)matching parentheses
 (column-number-mode)			; display detailed row+column info
 (autoload 'markdown-mode "markdown-mode.el"
-  "Major mode for editing Markdown files" t) 
+  "Major mode for editing Markdown files" t)
 (load-library "php-mode-improved")
 (require 'cperl-mode)
 (defalias 'perl-mode 'cperl-mode)
@@ -54,24 +54,28 @@
 		  (background-color . "black")
 		  (cursor-color . "green"))
 		default-frame-alist))
-  (set-face-background 'region "slategrey")
-  (set-face-foreground 'highlight "black")
-  (set-face-background 'modeline "grey70")
-  (set-face-foreground 'modeline "black")
-  (mwheel-install)
-  (require 'avoid)			; make the pointer jump away
-  (mouse-avoidance-mode 'jump)
-					; font-lock setups...
+
   (setq font-lock-maximum-decoration t)
-  (setq font-lock-face-attributes
-	'((font-lock-comment-face	"grey80" nil nil t)
-	  (font-lock-string-face	"LightSalmon")
-	  (font-lock-keyword-face	"LightSteelBlue" nil t)
-	  (font-lock-function-name-face	"LightSkyBlue")
-	  (font-lock-variable-name-face	"LightGoldenrod")
-	  (font-lock-type-face		"PaleGreen")
-	  ;;;(font-lock-reference-face	"Aquamarine")
-	  ))
+
+  (set-face-background 'region "slategray")
+  (set-face-foreground 'highlight "black")
+  (set-face-background 'mode-line "gray70")
+  (set-face-foreground 'mode-line "black")
+
+  (set-face-attribute
+   'font-lock-comment-face nil :foreground "gray80" :slant 'italic)
+  (set-face-foreground 'font-lock-string-face "LightSalmon")
+  (set-face-attribute
+   'font-lock-keyword-face nil :foreground "LightSteelBlue" :weight 'bold)
+  (set-face-foreground 'font-lock-function-name-face "LightSkyBlue")
+  (set-face-foreground 'font-lock-variable-name-face "LightGoldenrod")
+  (set-face-foreground 'font-lock-type-face "PaleGreen")
+
+  (set-face-attribute		       ;customise cperl's uglier faces
+   'cperl-array-face nil :foreground "lightgoldenrod" :weight 'bold)
+  (set-face-attribute
+   'cperl-hash-face nil :foreground "lightgoldenrod" :weight 'bold))
+
 ;;;
   (font-lock-add-keywords
    'c-mode
@@ -97,15 +101,6 @@
      ("\\<\\(TODO\\):" 1 font-lock-warning-face t)))
   (add-hook 'find-file-hooks 'turn-on-font-lock)
 
-;  (set-face-attribute			; adjust the "whole-expr" match face
-;   'paren-face-match-light nil
-;   :background "gray10")
-  (set-face-attribute			; customise cperl's uglier faces
-   'cperl-array-face nil
-   :background "black" :foreground "lightgoldenrod" :bold t)
-  (set-face-attribute
-   'cperl-hash-face nil
-   :background "black" :foreground "lightgoldenrod" :bold t))
 					; Magic text modes based on file patterns
 (setq auto-mode-alist
       (append '(("\\.txt$"	. text-mode)
@@ -120,6 +115,7 @@
 		("\\.gemspec$"	. ruby-mode)
 		("^Rakefile$"	. ruby-mode)
 		("\\.php$"	. php-mode)
+		("\\.less$"	. css-mode)
 		("\\.mk$"	.  makefile-mode))
 	      auto-mode-alist))
 
@@ -145,16 +141,14 @@
 (defun wordpress-php-mode-setups ()
   "Custom PHP-mode setups for WordPress"
   (c-set-style "bsd")
-  (setq tab-width 2)			; Derek uses 2-space tabs!
   (c-toggle-auto-hungry-state 1)
   (setq comment-column 40
-	c-basic-offset  2
+	c-basic-offset  4
 	indent-tabs-mode nil))
 
 (defun php-mode-setups ()
   "Custom PHP-mode setups"
   (c-set-style "bsd")
-  (setq tab-width 8)			; Derek uses 2-space tabs!
   (c-toggle-auto-hungry-state 1)
   (setq comment-column 40
 	c-basic-offset  4
