@@ -8,7 +8,7 @@
 # ls:                --Colour options for listing files and directoriesl
 # .displayrc:        --X11 environment configuration, if any.
 # .envrc-hostname:   --per-host initialisation, if any.
-# 
+#
 export ENV_START=$(date "+.envrc: %c")
 #echo $ENV_START >&2
 
@@ -23,7 +23,7 @@ fi
 #
 # dirs_not_in_path() --Return a path-spec of "new" path elements.
 #
-dirs_not_in_path() 
+dirs_not_in_path()
 {
     local path=$1; shift
     for dir in "$@"; do
@@ -62,8 +62,10 @@ prepend_path()
 export PATH;
 PATH=$(prepend_path $PATH \
     . $HOME/bin $HOME/bin/$OS-$ARCH \
+    $HOME/.rbenv/bin \
     $HOME/local/bin $HOME/local/bin/$OS-$ARCH \
-    /usr/local/*bin /usr/local/opt/coreutils/libexec/gnubin \
+    /usr/local/*bin /usr/local/mysql/bin \
+    /usr/local/opt/coreutils/libexec/gnubin \
     /opt/local/libexec/gnubin /opt/*/bin /*bin /usr/*bin\
     $HOME/local/libexec /usr/local/libexec /opt/*/libexec)
 
@@ -75,7 +77,7 @@ export CDPATH=$(prepend_path "$CDPATH" . .. $HOME/Projects $HOME/github)
 
 export MANPATH=$(prepend_path "$MANPATH" \
     $HOME/local/man:$HOME/local/share/man \
-    usr/local/man /usr/local/share/man /usr/local/*/man \
+    /usr/local/man /usr/local/share/man /usr/local/*/man \
      /usr/local/opt/coreutils/libexec/gnuman \
     /opt/*/share/man /opt/share/man \
     /usr/*/man /usr/man)
@@ -91,7 +93,7 @@ fi
 
 #
 # ls: --Colour options for listing files and directoriesl
-# 
+#
 # directory           di=1         bold
 # symlink             ln=36        cyan
 # multiple hard links mh=4;36      underlined, cyan (not always supported...)
@@ -145,11 +147,12 @@ export LCLIMPORTDIR=/usr/local/share/splint/imports
 
 export SVN_EDITOR=/usr/local/bin/svn-edit
 #export SVN_ROOT=svn+ssh://somehost/srv/svn
-export SVN_ROOT=file://$HOME/svn
+#export SVN_ROOT=file://$HOME/svn
+export SVN_ROOT=https://subversion.alloratech.local:8443/svn/rep02
 
 #
 # .displayrc: --X11 environment configuration, if any.
-# 
+#
 # X11 setups are mostly done from the .displayrc file, which contains
 # the prevailing values if a session is currently open, and doesn't
 # exist when there is no current X11 session.
@@ -165,3 +168,10 @@ export XFILESEARCHPATH="$HOME/lib/X11/1024x768/%N:/usr/X11R6/lib/X11/%T/%N"
 if [ -f $HOME/.envrc-$HOSTNAME ] ; then
     . $HOME/.envrc-$HOSTNAME
 fi
+
+unset prepend_path
+unset dirs_not_in_path
+#
+# RBENV
+#
+#eval "$(rbenv init - )"
