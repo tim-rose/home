@@ -3,8 +3,8 @@
 # COLORTEST --Print terminal colour information as a test-pattern of swatches.
 #
 PATH=$PATH:$HOME/libexec:/usr/local/libexec
-. core.shl
-require log.shl getopt.shl
+. midden
+require log getopt
 
 usage() { getopt_usage "colortest [-c colors]" "$1"; }
 opts="c.colors=8;$LOG_GETOPTS"
