@@ -11,9 +11,10 @@ install:	$(RC_SRC:_%=$(DESTDIR)/$(HOME)/.%)
 
 $(DESTDIR)/$(HOME)/.%:	_%;		$(INSTALL_FILE)	$? $@
 
-src:
-	mk-filelist -qn RC_SRC _*[a-z]
+src:    rc-src
+.PHONY: rc-src
+rc-src:	;	mk-filelist -qn RC_SRC _*[a-z]
 
-toc:
-	mk-toc -qt .sh  $(RC_SRC)
-
+toc:    rc-toc
+.PHONY:	rc-toc
+rc-toc:	;	mk-toc -qt .sh  $(RC_SRC)

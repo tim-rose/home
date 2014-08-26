@@ -86,7 +86,6 @@ export MANPATH=$(prepend_path "$MANPATH" \
 # less: --Settings for paginated output.
 #
 export LESS=-MiRFX
-export LESSCHARSET=latin1
 if [ -x "$HOME/bin/lesspipe" ]; then
     export LESSOPEN="|$HOME/bin/lesspipe %s"
 fi
@@ -145,7 +144,7 @@ export RSYNC_RSH=ssh
 export LARCH_PATH=/usr/local/share/splint/lib
 export LCLIMPORTDIR=/usr/local/share/splint/imports
 
-export SVN_EDITOR=/usr/local/bin/svn-edit
+#export SVN_EDITOR=/usr/local/bin/svn-edit
 #export SVN_ROOT=svn+ssh://somehost/srv/svn
 #export SVN_ROOT=file://$HOME/svn
 export SVN_ROOT=https://subversion.alloratech.local:8443/svn/rep02
