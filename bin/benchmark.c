@@ -163,19 +163,19 @@ int main(int argc, char *argv[])
     benchmark("i1 = i2 % i3", i2=987654321;i3=123456789, i1=i2%i3);
 
     printf("Float:\n");
-    benchmark("f1 = f2 + f3", f2=987654321;f3=123456789, f3=f1+f2);
-    benchmark("f1 = f2 - f3", f2=987654321;f3=123456789, f3=f1-f2);
-    benchmark("f1 = f2 * f3", f2=987654321;f3=123456789, f3=f1*f2);
-    benchmark("f1 = f2 / f3", f2=987654321;f3=123456789, f3=f1/f2);
+    benchmark("f1 = f2 + f3", f2=987654321;f3=123456789, f1=f2+f3);
+    benchmark("f1 = f2 - f3", f2=987654321;f3=123456789, f1=f2-f3);
+    benchmark("f1 = f2 * f3", f2=987654321;f3=123456789, f1=f2*f3);
+    benchmark("f1 = f2 / f3", f2=987654321;f3=123456789, f1=f2/f3);
 
 #ifdef BENCH_DOUBLE
     do {
         volatile double d1, d2, d3;
         printf("Double:\n");
-        benchmark("d1 = d2 + d3", d1=0;d2=987654321;d3=123456789, d3=d1+d2);
-        benchmark("d1 = d2 - d3", d1=0;d2=987654321;d3=123456789, d3=d1-d2);
-        benchmark("d1 = d2 * d3", d1=0;d2=987654321;d3=123456789, d3=d1*d2);
-        benchmark("d1 = d2 / d3", d1=0;d2=987654321;d3=123456789, d3=d1/d2);
+        benchmark("d1 = d2 + d3", d1=0;d2=987654321;d3=123456789, d1=d2+d3);
+        benchmark("d1 = d2 - d3", d1=0;d2=987654321;d3=123456789, d1=d2-d3);
+        benchmark("d1 = d2 * d3", d1=0;d2=987654321;d3=123456789, d1=d2*d3);
+        benchmark("d1 = d2 / d3", d1=0;d2=987654321;d3=123456789, d1=d2/d3);
     } while (0);
 #endif /* BENCH_DOUBLE */
 
