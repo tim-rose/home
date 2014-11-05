@@ -107,7 +107,7 @@
 		("^README$"	. text-mode)
 		("\\.shl$"	. sh-mode)
 		("\\.wiki$"	. text-mode)
-		("\\.md$"	. markdown-mode)
+		("\\.m?md$"	. markdown-mode)
 		("\\.doc$"	. nroff-mode)
 		("\\.nw$"	. latex-mode)
 		("\\.t$"	. cperl-mode)
@@ -222,10 +222,4 @@
 ;(global-set-key [f20] 'kill-region)
 
 (server-start)				; emacs client setup
-;
-; Print an amusing message.  Apart from entertainment value, this
-; provides a positive acknowledgment that the initialisation has
-; succeeded.
-;
-(with-output-to-temp-buffer "*scratch*" (print (yow)))
-(message "Yow!")
+(message "let's go!")
