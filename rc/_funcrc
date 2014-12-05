@@ -13,7 +13,9 @@ less4()	{ less -x4 $*; }
 make()  { command make -I $DEVKIT_HOME/include "$@"; }
 mk()    { command make -I $DEVKIT_HOME/include -f $HOME/etc/tasks.mk "$@"; }
 
-find0() { find $* -print0; }
+find0() { find "$@" -print0; }
+recursively() { find . -type f -print0 | xargs -0 "$@"; }
+
 #
 # calc() --Echo a calculation result.
 #
@@ -25,12 +27,6 @@ maxlen() { sed -e 's/./+1/g' -e 's/^/0/'| bc | sort -rn | head -1; }
 
 pdfman() { man -t "$@" | pstopdf -i -o /tmp/$1.pdf; open /tmp/$1.pdf; sleep 2; rm /tmp/$1.pdf; }
 
-#
-# log-count() --Interactively watch an aggregation/summation of log data.
-#
-log_count() {
- watch "tail -10000 ${1:-/var/log/nginx/tutsplus.com.proxy.log}|cut -d' ' -f1 |sort |uniq -c|sort -n|tail -30"
-}
 #
 # tgrep() --"table" grep; print the first (header) line, and matching others.
 #
