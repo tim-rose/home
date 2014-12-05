@@ -25,7 +25,8 @@ fi
 #
 dirs_not_in_path()
 {
-    local path=$1; shift
+    local path="$1"; shift
+
     for dir in "$@"; do
 	case "$path" in
 	$dir:*)		;;		# already at start of path
@@ -60,7 +61,7 @@ prepend_path()
 }
 
 export PATH;
-PATH=$(prepend_path $PATH \
+PATH=$(prepend_path "$PATH" \
     . $HOME/bin $HOME/bin/$OS-$ARCH \
     $HOME/.rbenv/bin \
     $HOME/local/bin $HOME/local/bin/$OS-$ARCH \
@@ -73,7 +74,7 @@ export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
     $HOME/local/lib /usr/local/lib /opt/local/lib \
     /usr/lib /usr/X11R6/lib )
 
-export CDPATH=$(prepend_path "$CDPATH" . .. $HOME/Projects $HOME/github)
+#export CDPATH=$(prepend_path "$CDPATH" . .. $HOME/Projects $HOME/github)
 
 export MANPATH=$(prepend_path "$MANPATH" \
     $HOME/local/man:$HOME/local/share/man \
