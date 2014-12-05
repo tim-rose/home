@@ -1,16 +1,14 @@
 #
 # Makefile --Build rules for "a2ps", customisations for the a2ps utility..
 #
-LISP_SRC = markdown-mode.el php-mode-improved.el
-TRG_DIR = $(DESTDIR)/$(HOME)/.emacs.d/site-lisp
-SRC_LANG = lisp
+SRC_LANG = elisp
+ELISP_SRC = markdown-mode.el php-mode-improved.el
+HOME_ELISP_DIR = $(DESTDIR)/$(HOME)/.emacs.d/site-lisp
+
+$(HOME_ELISP_DIR)/%.el:	%.el
+	$(INSTALL_FILE)	$*.el $@
 
 include devkit.mk
 
-installdirs:	$(TRG_DIR)
-install:	$(LISP_SRC:%=$(TRG_DIR)/%)
-
-$(TRG_DIR):	;		$(INSTALL_DIRECTORY) $@
-$(TRG_DIR)/%:	%;		$(INSTALL_FILE)	$? $@
-
+install:	$(ELISP_SRC:%.el=$(HOME_ELISP_DIR)/%.el)
 
