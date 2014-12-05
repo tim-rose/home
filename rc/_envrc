@@ -9,14 +9,14 @@
 # .displayrc:        --X11 environment configuration, if any.
 # .envrc-hostname:   --per-host initialisation, if any.
 #
-inherited_path="$PATH"
+sys_path="$PATH"
 PATH=/bin:/usr/bin
-export ENV_START=$(date "+.envrc: %c")
+export ENV_START="$(date "+.envrc: %c")"
 #echo $ENV_START >&2
 
-export HOSTNAME=$(uname -n)
-export ARCH=$(uname -m|sed -e "s/i.86/i386/")
-export OS=$(uname -s | tr '[A-Z]' '[a-z]')
+export HOSTNAME="$(uname -n)"
+export ARCH="$(uname -m|sed -e "s/i.86/i386/")"
+export OS="$(uname -s | tr '[A-Z]' '[a-z]')"
 export USER=${USER:-$LOGNAME}
 
 if [ -f $HOME/tmp ]; then
@@ -64,7 +64,7 @@ prepend_path()
     fi
 }
 
-PATH=$(prepend_path "$inherited_path" \
+PATH=$(prepend_path "$sys_path" \
     . $HOME/bin $HOME/bin/$OS-$ARCH \
     $HOME/.rbenv/bin \
     $HOME/local/bin $HOME/local/bin/$OS-$ARCH \
@@ -72,7 +72,7 @@ PATH=$(prepend_path "$inherited_path" \
     /usr/local/opt/coreutils/libexec/gnubin \
     /opt/local/libexec/gnubin /opt/*/bin /*bin /usr/*bin\
     $HOME/local/libexec /usr/local/libexec /opt/*/libexec)
-unset inherited_path
+unset sys_path
 
 export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
     $HOME/local/lib /usr/local/lib /opt/local/lib \
