@@ -5,6 +5,7 @@ window_title () { :; }
 env()	{ /usr/bin/env|sort; }
 dir()	{ command ls --color=auto -Fax "$@"; }
 ls()	{ command ls --color=auto "$@"; }
+grep()	{ command grep --color=auto "$@"; }
 #dir()	{ command ls -G -Fax "$@"; }
 #ls()	{ command ls -G "$@"; }
 path()  { eval "echo \${${1:-PATH}}" | tr ':' '\012';  }
@@ -25,7 +26,7 @@ calc() { echo "scale=2; $*" | bc; }
 #
 maxlen() { sed -e 's/./+1/g' -e 's/^/0/'| bc | sort -rn | head -1; }
 
-pdfman() { man -t "$@" | pstopdf -i -o /tmp/$1.pdf; open /tmp/$1.pdf; sleep 2; rm /tmp/$1.pdf; }
+pdfman() { man -t "$@" | ps2pdf - - > /tmp/$1.pdf; open /tmp/$1.pdf; sleep 2; rm /tmp/$1.pdf; }
 
 #
 # tgrep() --"table" grep; print the first (header) line, and matching others.
