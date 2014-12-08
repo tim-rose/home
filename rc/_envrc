@@ -9,20 +9,6 @@
 # .displayrc:        --X11 environment configuration, if any.
 # .envrc-hostname:   --per-host initialisation, if any.
 #
-sys_path="$PATH"
-PATH=/bin:/usr/bin
-export ENV_START="$(date "+.envrc: %c")"
-#echo $ENV_START >&2
-
-export HOSTNAME="$(uname -n)"
-export ARCH="$(uname -m|sed -e "s/i.86/i386/")"
-export OS="$(uname -s | tr '[A-Z]' '[a-z]')"
-export USER=${USER:-$LOGNAME}
-
-if [ -f $HOME/tmp ]; then
-    export TMPDIR		# prefer home-based tmpdir, if it exists
-    TMPDIR="$HOME/tmp"
-fi
 
 #
 # dirs_not_in_path() --Return a path-spec of "new" path elements.
@@ -64,6 +50,20 @@ prepend_path()
     fi
 }
 
+#
+# Initial setups: get host, os, and arch using the "standard" path,
+# then go hunting for some more paths.
+#
+sys_path="$PATH"
+PATH=/bin:/usr/bin
+export ENV_START="$(date "+.envrc: %c")"
+#echo $ENV_START >&2
+
+export HOSTNAME="$(uname -n)"
+export ARCH="$(uname -m|sed -e "s/i.86/i386/")"
+export OS="$(uname -s | tr '[A-Z]' '[a-z]')"
+export USER=${USER:-$LOGNAME}
+
 PATH=$(prepend_path "$sys_path" \
     . $HOME/bin $HOME/bin/$OS-$ARCH \
     $HOME/.rbenv/bin \
@@ -72,7 +72,6 @@ PATH=$(prepend_path "$sys_path" \
     /usr/local/opt/coreutils/libexec/gnubin \
     /opt/local/libexec/gnubin /opt/*/bin /*bin /usr/*bin\
     $HOME/local/libexec /usr/local/libexec /opt/*/libexec)
-unset sys_path
 
 export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
     $HOME/local/lib /usr/local/lib /opt/local/lib \
@@ -86,17 +85,40 @@ export MANPATH=$(prepend_path "$MANPATH" \
      /usr/local/opt/coreutils/libexec/gnuman \
     /opt/*/share/man /opt/share/man \
     /usr/*/man /usr/man)
+#
+# Forget the path manipulation routines prepend_path(), dirs_not_in_path();
+# they're not needed any more.
+#
+unset prepend_path
+unset dirs_not_in_path
+unset sys_path
 
 #
-# less: --Settings for paginated output.
+# TMPDIR defaults to $HOME/tmp, if it exists.
 #
+if [ -f $HOME/tmp ]; then
+    export TMPDIR="$HOME/tmp"
+fi
+
+#
+# Settings for paginated output with less(1):
+# Options:
+# -M --*really* long prompt
+# -i --ignore case
+# -R --raw-passthru for ansi "color" escape sequences (for stupid loggers)
+# -F --quit if one screen
+# -X --don't sent terminal init strings
+#
+# Also, if there's a lesspipe filter, setup to use it.
+#
+export PAGER=less
 export LESS=-MiRFX
 if [ -x "$HOME/bin/lesspipe" ]; then
     export LESSOPEN="|$HOME/bin/lesspipe %s"
 fi
 
 #
-# ls: --Colour options for listing files and directoriesl
+# Colour options for listing files and directories with ls(1):
 #
 # directory           di=1         bold
 # symlink             ln=36        cyan
@@ -124,21 +146,36 @@ export LS_COLORS='di=1:ln=36:pi=32:so=32:do=32:bd=1;35:cd=1;35'
        LS_COLORS="$LS_COLORS:*~=38;05;8:*.bak=38;05;8"
        LS_COLORS="$LS_COLORS:ec=\e[m"
 
+#
+# Define ANSI colours for logging with LOG_COLORS.
+#
 export LOG_COLORS='debug=36:notice=1:warning=1;33:err=1;31:crit=1;33;41:alert=1;5;33;41:emerg=1;5;37;41'
 
-export EDITOR=vi
-export GREP_OPTIONS=--color=auto
-export GREP_COLOR=36		# cyan
+#
+# Colour options for displaying matches in grep(1):
+#
+# ms --match selection			(default: 01;31)
+# mc --match in context, if -v		(default: 01;31)
+# mt --match text ( =ms,mc)
+# sl --selected line
+# cx --context line
+# fn --filename				(default: 35)
+# ln --line number			(default: 32)
+# bn --byte number			(default: 32)
+# se --filename				(default: 36)
+#
+export GREP_COLORS='ms=1;36:mc=1:cx=2:fn=36'
 export ACK_OPTIONS="--color-match=cyan --color-filename=bold --color-lineno=yellow --nogroup"
-export PAGER=less
 
 export WIRESHARK_APP_DIR=/Applications/Extras
 
 #
 # development settings...
 #
+export EDITOR=vi
 export CC=gcc
 export prefix=/usr/local
+export DESTDIR=/
 export DEVKIT_HOME=/usr/local
 export VCS=git
 export PERL5LIB=$prefix/lib/perl5
@@ -146,16 +183,13 @@ export PERL5LIB=$prefix/lib/perl5
 # export CVS_RSH=ssh
 export RSYNC_RSH=ssh
 
-export LARCH_PATH=/usr/local/share/splint/lib
-export LCLIMPORTDIR=/usr/local/share/splint/imports
-
 #export SVN_EDITOR=/usr/local/bin/svn-edit
 #export SVN_ROOT=svn+ssh://somehost/srv/svn
 #export SVN_ROOT=file://$HOME/svn
 export SVN_ROOT=https://subversion.alloratech.local:8443/svn/rep02
 
 #
-# .displayrc: --X11 environment configuration, if any.
+# X11 environment configuration, if any.
 #
 # X11 setups are mostly done from the .displayrc file, which contains
 # the prevailing values if a session is currently open, and doesn't
@@ -167,14 +201,12 @@ fi
 export XFILESEARCHPATH="$HOME/lib/X11/1024x768/%N:/usr/X11R6/lib/X11/%T/%N"
 
 #
-# .envrc-hostname: --per-host initialisation, if any.
+# Per-host initialisation, if any.
 #
 if [ -f $HOME/.envrc-$HOSTNAME ] ; then
     . $HOME/.envrc-$HOSTNAME
 fi
 
-unset prepend_path
-unset dirs_not_in_path
 #
 # RBENV
 #
