@@ -4,10 +4,6 @@
 # Contents:
 # dirs_not_in_path() --Return a path-spec of "new" path elements.
 # prepend_path()     --Merge two path-spec.s as a ":" separated list.
-# less:              --Settings for paginated output.
-# ls:                --Colour options for listing files and directoriesl
-# .displayrc:        --X11 environment configuration, if any.
-# .envrc-hostname:   --per-host initialisation, if any.
 #
 
 #
