@@ -18,7 +18,7 @@ test -z "$ENV_START" && . "$HOME/.envrc"
 test -f "$HOME/.ttyrc" && . "$HOME/.ttyrc"
 test -f "$HOME/.funcrc" && . "$HOME/.funcrc"
 
-# 
+#
 # Set main prompt.  Note, this prompt is syntactally a shell nop,
 # so complete lines can be selected and pasted for re-execution.
 #
@@ -28,9 +28,8 @@ fi
 
 case $HOSTNAME in
     joshu*)	fg=32;;		# green: development
-    kyogen*)	fg=32;;
-    tutsplus*)	fg=33;;		# yellow: production
-    creattica*)	fg=33;;
+    ALLWS-036*)	fg=32;;
+    *production*)	fg=33;;		# yellow: production
     *)		fg=36;;		# cyan: other
 esac
 case $(id) in

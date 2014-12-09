@@ -128,7 +128,7 @@ fi
 # setuid              su=35        magenta
 # setgid              sg=35
 # capability          ca=35
-# writable+sticky     tw=31;45     red/magenta
+# writable+sticky     tw=30;45     white/magenta
 # writable by others  ow=31        red
 # sticky              st=35        magenta
 # executable          ex=32        green
@@ -137,7 +137,7 @@ fi
 #
 export LS_COLORS='di=1:ln=36:pi=32:so=32:do=32:bd=1;35:cd=1;35'
        LS_COLORS="$LS_COLORS:or=4;36:su=35:sg=35:ca=35"
-       LS_COLORS="$LS_COLORS:tw=31;45:ow=31:st=35:ex=32"
+       LS_COLORS="$LS_COLORS:tw=30;45:ow=31:st=35:ex=32"
 #       LS_COLORS="$LS_COLORS:*~=34:*.bak=34"
        LS_COLORS="$LS_COLORS:*~=38;05;8:*.bak=38;05;8"
        LS_COLORS="$LS_COLORS:ec=\e[m"
@@ -158,9 +158,9 @@ export LOG_COLORS='debug=36:notice=1:warning=1;33:err=1;31:crit=1;33;41:alert=1;
 # fn --filename				(default: 35)
 # ln --line number			(default: 32)
 # bn --byte number			(default: 32)
-# se --filename				(default: 36)
+# se --separator			(default: 36)
 #
-export GREP_COLORS='ms=1;36:mc=1:cx=2:fn=36'
+export GREP_COLORS='ms=1:mc=1:cx=2:fn=36'
 export ACK_OPTIONS="--color-match=cyan --color-filename=bold --color-lineno=yellow --nogroup"
 
 export WIRESHARK_APP_DIR=/Applications/Extras
