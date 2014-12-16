@@ -33,7 +33,7 @@ case $HOSTNAME in
     *)		fg=36;;		# cyan: other
 esac
 case $(id) in
-    uid=0*)     fg=33; bg=41;;	# yellow/red
+    0?root?*)     fg=33; bg=41;;	# yellow/red
     *)		bg=;;	# unset...
 esac
 if [ "$bg" != "" ]; then
