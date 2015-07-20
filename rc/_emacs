@@ -16,6 +16,7 @@
       transient-mark-mode	t	; show regions as a highlighted face
       line-number-mode		t	; display line numbers in mode line
       require-final-newline	t	; force files to end in a new-line
+      next-line-add-newlines	t	; create newlines as needed.
       scroll-step		1
       text-mode-hook 		'turn-on-auto-fill)
 
@@ -193,7 +194,7 @@
 (global-set-key "\M-p"     'scroll-down-1)
 (global-set-key "\M-n"     'scroll-up-1)
 (global-set-key "\M-g"     'goto-line)
-(global-set-key "\M-o"     'overwrite-mode)
+;(global-set-key "\M-o"     'overwrite-mode)
 (global-set-key "\C-x="    'what-line)
 (global-set-key "\C-x "    'just-one-space)
 (global-set-key "\M-#"     'insert-date)

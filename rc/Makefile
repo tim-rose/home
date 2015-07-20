@@ -1,7 +1,8 @@
 #
 # Makefile --Build rules for "rc", home-directory config files.
 #
-RC_SRC = _bashrc _emacs _envrc _funcrc _gitignore _profile _vimrc
+RC_SRC = _bashrc _emacs _envrc _funcrc _gitconfig _gitignore \
+    _profile _vimrc
 
 default: install
 

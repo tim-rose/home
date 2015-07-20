@@ -1,7 +1,7 @@
 #
 # Makefile --Build rules for "a2ps", customisations for the a2ps utility..
 #
-SRC_LANG = elisp
+language = elisp
 ELISP_SRC = markdown-mode.el php-mode-improved.el
 HOME_ELISP_DIR = $(DESTDIR)/$(HOME)/.emacs.d/site-lisp
 

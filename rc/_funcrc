@@ -2,10 +2,9 @@
 # define function/aliases...
 #
 window_title () { :; }
-env()	{ /usr/bin/env|sort; }
+env()	{ command env | sort; }
 dir()	{ command ls --color=auto -Fax "$@"; }
 ls()	{ command ls --color=auto "$@"; }
-grep()	{ command grep --color=auto "$@"; }
 #dir()	{ command ls -G -Fax "$@"; }
 #ls()	{ command ls -G "$@"; }
 path()  { eval "echo \${${1:-PATH}}" | tr ':' '\012';  }

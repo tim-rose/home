@@ -52,12 +52,12 @@ prepend_path()
 #
 sys_path="$PATH"
 PATH=/bin:/usr/bin
-export ENV_START="$(date "+.envrc: %c")"
+export ENV_START="$(date '+.envrc: %c')"
 #echo $ENV_START >&2
 
 export HOSTNAME="$(uname -n)"
-export ARCH="$(uname -m|sed -e "s/i.86/i386/")"
-export OS="$(uname -s | tr '[A-Z]' '[a-z]')"
+export ARCH="$(uname -m|sed -e 's/i.86/i386/')"
+export OS="$(uname -s | tr A-Z a-z | sed -e 's/-[.0-9]*//')"
 export USER=${USER:-$LOGNAME}
 
 PATH=$(prepend_path "$sys_path" \
@@ -71,7 +71,7 @@ PATH=$(prepend_path "$sys_path" \
 
 export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
     $HOME/local/lib /usr/local/lib /opt/local/lib \
-    /usr/lib /usr/X11R6/lib )
+    /usr/lib /usr/X11R6/lib)
 
 #export CDPATH=$(prepend_path "$CDPATH" . .. $HOME/Projects $HOME/github)
 
@@ -160,7 +160,7 @@ export LOG_COLORS='debug=36:notice=1:warning=1;33:err=1;31:crit=1;33;41:alert=1;
 # bn --byte number			(default: 32)
 # se --separator			(default: 36)
 #
-export GREP_COLORS='ms=1:mc=1:cx=2:fn=36'
+export GREP_COLORS='ms=36:mc=36:cx=2:fn=1'
 export ACK_OPTIONS="--color-match=cyan --color-filename=bold --color-lineno=yellow --nogroup"
 
 export WIRESHARK_APP_DIR=/Applications/Extras
