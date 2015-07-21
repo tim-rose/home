@@ -1,14 +1,25 @@
-#!/bin/sh
-# PROFILE --Timmo's profile
+#
+# PROFILE --login commands.
+#
+# Remarks:
+# The profile guesses at the shell, and sets up the "ENV" variable
+# appropriately (e.g. .shrc, .bashrc, .kshrc etc.)
+# Beware:
+#  * Ubuntu lightdm-session ignores your login-shell, and runs it via /bin/sh
+#  * cygwin's ps command is broken, so we do a fallback to bash.
 #
 #date "+.profile: %c"
-env=$(basename $SHELL)
-env=.${env}rc
-ENV=${ENV:-$env}
-export ENV
-test -f "$HOME/.envrc"     && . "$HOME/.envrc"	# environment setups
-test -f "$HOME/.ttyrc"     && . "$HOME/.ttyrc"	# tty setups
-test -f "$HOME/.displayrc" && . "$HOME/.displayrc"	# X11 setups
+load_files()
+{
+    for file; do
+	if [ -f $file ]; then
+	    # echo "loading $file" >&2
+	    . $file
+	fi
+    done
+}
 
-test -f $HOME/$ENV && . $HOME/$ENV # shell setups
-test -x "$HOME/bin/auntie" && auntie -r 1-7 -s -m "%a %b %e: "
+shell=$(ps -o comm= $$ 2>/dev/null| sed -e 's/^-//') # guess current shell
+export ENV=${ENV:-$HOME/.${shell:-bash}rc}
+load_files $HOME/.envrc $HOME/.ttyrc $HOME/.displayrc $ENV
+unset shell load_files
