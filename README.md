@@ -11,8 +11,8 @@ they're installed via **make**(1), using the macros defined
 in [devkit](git@github.com:tim-rose/devkit.git), so you'll have to get
 and install that first.
 
-### Adminkit
+### Midden
 
 Most of the scripts in this directory rely on libraries of shell
-functions provided by *another* repository:
-[adminkit](git@github.com:tim-rose/adminkit.git). 
+functions provided by *another* of my repositories:
+[midden](git@github.com:tim-rose/midden.git). 
