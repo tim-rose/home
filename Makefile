@@ -1,5 +1,4 @@
 #
-# Makefile --Build rules for "HOME", administration tools..
-#
+# Makefile --Build rules for "HOME", my personal stuff.
 #
 include devkit.mk

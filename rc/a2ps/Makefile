@@ -1,16 +1,11 @@
 #
 # Makefile --Build rules for "a2ps", customisations for the a2ps utility..
 #
+prefix = $(HOME)
 SRC = a2psrc
-TRG_DIR = $(DESTDIR)/$(HOME)/.a2ps
-default: install
 
 include devkit.mk
 
-installdirs:	$(TRG_DIR)
-install:	$(SRC:%=$(TRG_DIR)/%)
+install:	$(SRC:%=$(rootdir)/.a2ps/%)
 
-$(TRG_DIR):	;		$(INSTALL_DIRECTORY) $? $@
-$(TRG_DIR)/%:	%;		$(INSTALL_FILE)	$? $@
-
-
+$(rootdir)/.a2ps/%:	%;		$(INSTALL_FILE)	$? $@

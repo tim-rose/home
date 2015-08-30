@@ -1,15 +1,12 @@
 #
 # Makefile --Build rules for "a2ps", customisations for the a2ps utility..
 #
-TRG_DIR = $(DESTDIR)/$(HOME)/.vim/colors
+prefix = $(HOME)
+vimdir = $(prefix)/.vim/colors
 SRC = custom.vim
 
 include devkit.mk
 
-installdirs:	$(TRG_DIR)
-install:	$(SRC:%=$(TRG_DIR)/%)
+install:	$(SRC:%=$(vimdir)/%)
 
-$(TRG_DIR):	;		$(INSTALL_DIRECTORY) $@
-$(TRG_DIR)/%:	%;		$(INSTALL_FILE)	$? $@
-
-
+$(vimdir)/%:	%;		$(INSTALL_FILE)	$? $@
