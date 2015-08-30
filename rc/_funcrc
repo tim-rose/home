@@ -14,6 +14,10 @@ make()  { command make -I $DEVKIT_HOME/include "$@"; }
 mk()    { command make -I $DEVKIT_HOME/include -f $HOME/etc/tasks.mk "$@"; }
 
 find0() { find "$@" -print0; }
+
+#
+# recursively() --Run a command on all files in this directory and subdirs.
+#
 recursively() { find . -type f -print0 | xargs -0 "$@"; }
 
 #
@@ -25,9 +29,29 @@ calc() { echo "scale=2; $*" | bc; }
 #
 maxlen() { sed -e 's/./+1/g' -e 's/^/0/'| bc | sort -rn | head -1; }
 
-pdfman() { man -t "$@" | ps2pdf - - > /tmp/$1.pdf; open /tmp/$1.pdf; sleep 2; rm /tmp/$1.pdf; }
+#
+# pdfman() --Open a man page as a PDF file.
+#
+pdfman() {
+    man -t "$@" | ps2pdf - - > /tmp/$1.pdf;
+    open /tmp/$1.pdf;
+    sleep 2;
+    rm /tmp/$1.pdf;
+}
 
 #
 # tgrep() --"table" grep; print the first (header) line, and matching others.
 #
 tgrep() { local tag=$1; shift; cat $* |sed -ne1p -e "/$tag/p"; }
+
+#
+# svncd() --Move to the top of a SVN repository.
+#
+svncd() {
+    local oldpwd=$PWD
+    while [ ! -d .svn -a "$PWD" != "/" ]; do
+	cd ..
+    done
+    OLDPWD=$oldpwd
+    echo "$PWD";
+}
