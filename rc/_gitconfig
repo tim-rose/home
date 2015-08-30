@@ -9,6 +9,8 @@
 	excludesfile = ~/.gitignore
 	autocrlf = input
 	safecrlf = true
+[push]
+	default = simple
 [color]
 	ui = auto
 [diff]
