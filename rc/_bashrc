@@ -26,12 +26,11 @@ if [ "$VCS" = "git" ]; then
     vcs_prompt="\$(git branch 2>/dev/null|sed -ne '/^[*]/s/^[*] */:/p')"
 fi
 
-case $HOSTNAME in
-    joshu*)	fg=32;;		# green: development
-    ALLWS-036*)	fg=32;;
-    *production*)	fg=33;;		# yellow: production
-    *)		fg=36;;		# cyan: other
-esac
+if [ "$SSH_CONNECTION" ]; then
+    fg=36			# local: green
+else
+    fg=32			# remote: cyan
+fi
 case $(id) in
     *0?root?*)     fg=33; bg=41;;	# yellow/red
     *)		bg=;;	# unset...
