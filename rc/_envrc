@@ -103,12 +103,11 @@ fi
 # -i --ignore case
 # -R --raw-passthru for ansi "color" escape sequences (for stupid loggers)
 # -F --quit if one screen
-# -X --don't sent terminal init strings
 #
 # Also, if there's a lesspipe filter, setup to use it.
 #
 export PAGER=less
-export LESS=-MiRFX
+export LESS=-MiR
 if [ -x "$HOME/bin/lesspipe" ]; then
     export LESSOPEN="|$HOME/bin/lesspipe %s"
 fi
@@ -170,8 +169,6 @@ export WIRESHARK_APP_DIR=/Applications/Extras
 #
 export EDITOR=vi
 export CC=gcc
-export prefix=/usr/local
-export DESTDIR=/
 export DEVKIT_HOME=/usr/local
 export VCS=git
 export PERL5LIB=$prefix/lib/perl5
