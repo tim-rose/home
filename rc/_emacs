@@ -107,6 +107,7 @@
       (append '(("\\.txt$"	. text-mode)
 		("^README$"	. text-mode)
 		("\\.shl$"	. sh-mode)
+		("\\.sed$"	. sh-mode)
 		("\\.wiki$"	. text-mode)
 		("\\.m?md$"	. markdown-mode)
 		("\\.doc$"	. nroff-mode)
