@@ -9,6 +9,7 @@
 #  * cygwin's ps command is broken, so we do a fallback to bash.
 #
 #date "+.profile: %c"
+
 load_files()
 {
     for file; do
@@ -19,7 +20,8 @@ load_files()
     done
 }
 
-shell=$(ps -o comm= $$ 2>/dev/null| sed -e 's/^-//') # guess current shell
-export ENV=${ENV:-$HOME/.${shell:-bash}rc}
+shell=$(ps -o comm= $$ 2>/dev/null | sed -e 's/^-//') # guess current shell
+export ENV=${ENV:-$HOME/.${shell:-bash}rc}	# fallback to bash
+
 load_files $HOME/.envrc $HOME/.ttyrc $HOME/.displayrc $ENV
 unset shell load_files

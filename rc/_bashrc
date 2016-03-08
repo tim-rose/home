@@ -1,10 +1,7 @@
 #!/bin/sh
-# .KSHRC (->.BASHRC) --RC file for KSH (and BASH)
+# .BASHRC (->.KSHRC) --RC file for (interactive) Bourne-like shells.
 #
 #date "+.bashrc: %c"
-if [ ! "$PS1" ]; then
-    return
-fi
 umask 002
 set -o ignoreeof	# ignore <CTRL d>, use exit to terminate ksh
 set -o emacs		# Set up in-line edit
@@ -14,58 +11,79 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 test -f /etc/bashrc && . /etc/bashrc # REVISIT: is this needed?
-test -z "$ENV_START" && . "$HOME/.envrc"
-test -f "$HOME/.ttyrc" && . "$HOME/.ttyrc"
-test -f "$HOME/.funcrc" && . "$HOME/.funcrc"
+
+vcs_info()
+{
+    git branch 2>/dev/null | sed -ne '/^[*]/s/^[*] */:/p'
+}
 
 #
-# Set main prompt.  Note, this prompt is syntactally a shell nop,
-# so complete lines can be selected and pasted for re-execution.
+# set_prompt() -- Customise the user prompt.
 #
-if [ "$VCS" = "git" ]; then
-    vcs_prompt="\$(git branch 2>/dev/null|sed -ne '/^[*]/s/^[*] */:/p')"
-fi
+# Remarks:
+# Set main prompt, to ": [<stuff>]; ". Note, this prompt is
+# syntactally a shell nop, so complete lines can be selected and
+# pasted for re-execution.
+#
+# Note: this function is removed after it is used.
+#
+# REVISIT: disable apple-term's "represented file" stuff?:
+# \033]6;file-url\007 \033]7;file-url\007
+#
+set_prompt()
+{
+    local fg= bg= window_title= mode=
+    if [ "$VCS" = "git" ]; then
+	vcs_prompt="\$(vcs_info)"
+    fi
 
-if [ "$SSH_CONNECTION" ]; then
-    fg=36			# local: green
-else
-    fg=32			# remote: cyan
-fi
-case $(id) in
-    *0?root?*)     fg=33; bg=41;;	# yellow/red
-    *)		bg=;;	# unset...
-esac
-if [ "$bg" != "" ]; then
-    mode="\e[${fg};${bg};1m"
-else
-    mode="\e[${fg};1m"
-fi
-case "$TERM" in
-    xterm*|rxvt*|dtterm*|cygwin)	# title-bar displays user+host+directory
-        PS1="\[\e]1;\h\a\e]2;\u@\h \w\a\]: [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
-        PS2="\[\e[36m\]: > \[\e[;m\]"
-	window_title()
-	{
-	    printf "\033]2;"
-	    printf "$@"
-	    printf "\007"
-	} >/dev/tty
-	;;
-    ansi|linux|vt[0-9]*)	# colourful prompt only
-        PS1=": [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
-        PS2="\[\e[36m\]: > \[\e[;m\]"
-	;;
-    *)				# display hostname in prompt
-        PS1=': [\h$vcs_prompt]; '
-	PS2=': > '
-	;;
-esac
+    # local/remote customisation: local=green, remote=cyan
+    if [ "$SSH_CONNECTION" ]; then fg=36; else fg=32; fi
 
-cd .				# ...let RVM do its thing
+    # privilege customisation: root=yellow/red
+    case $(id) in *0?root?*) fg=33; bg=41;; *) bg=;; esac
+
+    # finalise fg, bg "colours"
+    if [ "$bg" ]; then
+	mode="\e[${fg};${bg};1m"
+    else
+	mode="\e[${fg};1m"
+    fi
+
+    #
+    # terminal customisation: if supported:
+    #  * show additional info in title bar
+    #  * show VCS status/info
+    #  * adjust fg/bg as per above customisations
+    #
+    case "$TERM" in
+	xterm*|rxvt*|dtterm*|cygwin)
+	    window_title='\[\e]1;\h\007\e]2;\u@\h \w\007\]'
+            PS1="$window_title: [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
+            PS2="\[\e[36m\]: > \[\e[;m\]"
+	    ;;
+	ansi|linux|vt[0-9]*)	# colourful prompt only
+            PS1=": [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
+            PS2="\[\e[36m\]: > \[\e[;m\]"
+	    ;;
+	*)				# display hostname in prompt
+            PS1=': [\h$vcs_prompt]; '
+	    PS2=': > '
+	    ;;
+    esac
+
+    if [ "$COLORTERM" = "gnome-terminal" ]; then
+	printf '\033]12;red\007'	# gnome: set red cursor (erk!)
+    fi
+}
+set_prompt
+unset set_prompt
 
 #
-# load host-specific rc file
+# load any further customisations from the etc directory, and bashrc-<host>
 #
-if [ -f $HOME/$ENV-$HOSTNAME ]; then
-    . $HOME/$ENV-$HOSTNAME
-fi
+for file in $HOME/etc/sh/.??* $HOME/etc/sh/* $HOME/$ENV-$HOSTNAME; do
+    if [ -e "$file" ]; then
+	. $file
+    fi
+done
