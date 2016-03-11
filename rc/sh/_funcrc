@@ -2,7 +2,7 @@
 # define function/aliases...
 #
 env()	{ command env | sort; }
-grep()  { command grep --color=auto "$@"; }
+#grep()  { command grep --color=auto "$@"; }
 dir()	{ command ls --color=auto -Fax "$@"; }
 ls()	{ command ls --color=auto "$@"; }
 #dir()	{ command ls -G -Fax "$@"; }
