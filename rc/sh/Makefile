@@ -2,13 +2,13 @@
 # Makefile --Build rules for "rc", home-directory config files.
 #
 prefix = $(HOME)
-RC_SRC = _bashrc _emacs _gitconfig _gitignore _profile _vimrc
+RC_SRC = _envrc _funcrc
 
 include devkit.mk
 
-install:	$(RC_SRC:_%=$(rootdir)/.%)
+install:	$(RC_SRC:_%=$(rootdir)/etc/sh/%)
 
-$(rootdir)/.%:	_%;		$(INSTALL_FILE)	$? $@
+$(rootdir)/etc/sh/%:	_%;		$(INSTALL_FILE)	$? $@
 
 src:    src-rc
 .PHONY: src-rc

@@ -1,8 +1,8 @@
 #!/bin/sh
 # define function/aliases...
 #
-window_title () { :; }
 env()	{ command env | sort; }
+grep()  { command grep --color=auto "$@"; }
 dir()	{ command ls --color=auto -Fax "$@"; }
 ls()	{ command ls --color=auto "$@"; }
 #dir()	{ command ls -G -Fax "$@"; }
@@ -43,15 +43,3 @@ pdfman() {
 # tgrep() --"table" grep; print the first (header) line, and matching others.
 #
 tgrep() { local tag=$1; shift; cat $* |sed -ne1p -e "/$tag/p"; }
-
-#
-# svncd() --Move to the top of a SVN repository.
-#
-svncd() {
-    local oldpwd=$PWD
-    while [ ! -d .svn -a "$PWD" != "/" ]; do
-	cd ..
-    done
-    OLDPWD=$oldpwd
-    echo "$PWD";
-}

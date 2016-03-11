@@ -6,11 +6,14 @@ umask 002
 set -o ignoreeof	# ignore <CTRL d>, use exit to terminate ksh
 set -o emacs		# Set up in-line edit
 HISTCONTROL=ignoreboth		# bash history control
+
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-test -f /etc/bashrc && . /etc/bashrc # REVISIT: is this needed?
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
 
 vcs_info()
 {
@@ -82,7 +85,7 @@ unset set_prompt
 #
 # load any further customisations from the etc directory, and bashrc-<host>
 #
-for file in $HOME/etc/sh/.??* $HOME/etc/sh/* $HOME/$ENV-$HOSTNAME; do
+for file in $HOME/etc/sh/* $HOME/$ENV-$HOSTNAME; do
     if [ -e "$file" ]; then
 	. $file
     fi
