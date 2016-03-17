@@ -96,7 +96,7 @@ if [ ! -f perl-provides.txt ]; then
 	    -e "s/^perl(//" -e "s/)\$//" >perl-provides.txt
 fi
 if [ $# = 0 ]; then
-   pkgs=`cut -d'\t' -f3 <pkg.csv | sort -u | sed -e 's|.*/||`
+   pkgs=`cut -d'\t' -f3 <pkg.csv | sort -u | sed -e 's|.*/||'`
 else
    pkgs=$*
 fi
