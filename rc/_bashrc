@@ -44,9 +44,8 @@ ps1_status()
 	mode_fg= mode_end=
     fi
     if [ $status != 0 ]; then
-	printf "${mode_fg}command failed, status: %d${mode_end}\n" $status
+	printf "${mode_fg}# command failed, status: %d${mode_end}\n" $status
     fi
-    true
 }
 
 #
@@ -90,13 +89,13 @@ set_prompt()
     #
     case "$TERM" in
 	xterm*|rxvt*|dtterm*|cygwin)
-	    PROMPT_COMMAND="ps1_status \$? 31"
+	    PROMPT_COMMAND="ps1_status \$? '1;31'"
 	    window_title='\[\e]1;\h\007\e]2;\u@\h \w\007\]'
             PS1="$window_title: [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[;m\]"
 	    ;;
 	ansi|linux|vt[0-9]*)	# colourful prompt only
-	    PROMPT_COMMAND="ps1_status \$? 31"
+	    PROMPT_COMMAND="ps1_status \$? '1;31'"
             PS1=": [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[;m\]"
 	    ;;
