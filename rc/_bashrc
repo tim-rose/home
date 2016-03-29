@@ -107,7 +107,7 @@ set_prompt()
 	    ;;
     esac
 
-    if [ "$COLORTERM" = "gnome-terminal" ]; then
+    if [ "$DESKTOP_SESSION" = "gnome-classic" ]; then
 	printf '\033]12;red\007'	# gnome: set red cursor (erk!)
     fi
 }
