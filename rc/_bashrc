@@ -3,7 +3,7 @@
 #
 # Contents:
 # ps1_vcs()    --Show the current git branch, if any.
-# ps1_status() --Print the status of the previous command, if it failed.
+# cmd_status() --Print the status of the previous command, if it failed.
 # set_prompt() -- Customise the user prompt.
 #
 # Remarks:
@@ -33,9 +33,9 @@ ps1_vcs()
 }
 
 #
-# ps1_status() --Print the status of the previous command, if it failed.
+# cmd_status() --Print the status of the previous command, if it failed.
 #
-ps1_status()
+cmd_status()
 {
     local status=$? reason=
 
@@ -90,18 +90,18 @@ set_prompt()
     #
     case "$TERM" in
 	xterm*|rxvt*|dtterm*|cygwin)
-	    PROMPT_COMMAND="ps1_status"
+	    PROMPT_COMMAND="cmd_status"
 	    window_title='\[\e]1;\h\007\e]2;\u@\h \w\007\]'
             PS1="$window_title: [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[;m\]"
 	    ;;
 	ansi|linux|vt[0-9]*)	# colourful prompt only
-	    PROMPT_COMMAND="ps1_status"
+	    PROMPT_COMMAND="cmd_status"
             PS1=": [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[;m\]"
 	    ;;
 	*)				# display hostname in prompt
-	    PROMPT_COMMAND="ps1_status \$?"
+	    PROMPT_COMMAND="cmd_status \$?"
             PS1=': [\h$vcs_prompt]; '
 	    PS2=': > '
 	    ;;
