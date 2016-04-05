@@ -37,15 +37,16 @@ ps1_vcs()
 #
 cmd_status()
 {
-    local status=$? reason=
+    local status=$? reason= signal=
 
     if [ $status -ge 128 ]; then
-	reason="caught signal: $(($status-128))"
+	signal=$(($status-128))
+	reason="caught signal $signal ($(kill -l $signal))"
     elif [ $status != 0 ]; then
-	reason="exit status: $status"
+	reason="exit status $status"
     fi
     if [ $status != 0 ]; then
-	printf "\033[1;31m# command failed. %s\033[m\n" "$reason"
+	printf "\033[1;31m# command failed: %s.\033[m\n" "$reason"
     fi
 }
 
