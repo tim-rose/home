@@ -1,5 +1,5 @@
 #
-# Makefile --Build rules for "etc", miscellaneous data
+# Makefile --Build rules for "etc", miscellaneous data.
 #
 prefix = $(HOME)
 MK_SRC = tasks.mk
