@@ -37,11 +37,14 @@ ps1_vcs()
 #
 cmd_status()
 {
-    local status=$? reason= signal=
+    local status=$? reason= signal= signal_name=
 
     if [ $status -ge 128 ]; then
 	signal=$(($status-128))
-	reason="caught signal $signal ($(kill -l $signal))"
+	if ! signal_name=$(kill -l $signal 2>/dev/null); then
+	    signal_name="unknown signal"
+	fi
+	reason="caught signal $signal ($signal_name)"
     elif [ $status != 0 ]; then
 	reason="exit status $status"
     fi
