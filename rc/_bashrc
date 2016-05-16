@@ -51,7 +51,7 @@ cmd_status()
 	fi
 	reason="caught signal $signal ($signal_name)"
     fi
-    printf "\033[1;31mcommand failed: %s.\033[m\n" "$reason"
+    printf "\033[2m# command failed: %s.\033[m\n" "$reason"
 }
 
 #
