@@ -18,6 +18,7 @@
       require-final-newline	t	; force files to end in a new-line
       next-line-add-newlines	t	; create newlines as needed.
       scroll-step		1
+      desktop-path		"~/.emacs.d"
       desktop-save-mode		1	; auto-save session state
       text-mode-hook 		'turn-on-auto-fill)
 
