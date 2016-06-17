@@ -43,15 +43,15 @@ cmd_status()
 	return
     fi
     if [ $status -lt 128 ]; then
-	reason="exited with status $status"
+	reason="exit status: $status"
     else
 	signal=$(($status-128))
 	if ! signal_name=$(kill -l $signal 2>/dev/null); then
 	    signal_name="unknown signal"
 	fi
-	reason="caught signal $signal ($signal_name)"
+	reason="caught signal: $signal ($signal_name)"
     fi
-    printf "\033[2m# command failed: %s.\033[m\n" "$reason"
+    printf "\033[2m# process %s\033[m\n" "$reason"
 }
 
 #
