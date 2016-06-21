@@ -122,7 +122,7 @@ unset set_prompt
 #
 # load any further customisations from the etc directory, and bashrc-<host>
 #
-for file in $HOME/etc/sh/* $HOME/$ENV-$HOSTNAME; do
+for file in $HOME/etc/sh/* $ENV-$HOSTNAME; do
     if [ -e "$file" ]; then
 	. $file
     fi

@@ -1,14 +1,18 @@
 #
 # Makefile --Build rules for "rc", home-directory config files.
 #
-prefix = $(HOME)
+override prefix = $(HOME)
 RC_SRC = _bashrc _emacs _gitconfig _gitignore _profile _vimrc
 
 include devkit.mk
 
-install:	$(RC_SRC:_%=$(rootdir)/.%)
+install: $(RC_SRC:_%=$(rootdir)/.%)
+install: $(rootdir)/.bashrc-$(HOSTNAME)
 
 $(rootdir)/.%:	_%;		$(INSTALL_FILE)	$? $@
+
+$(rootdir)/.bashrc-$(HOSTNAME): Makefile
+	echo "# custom settings for $(HOSTNAME)" >$@
 
 src:    src-rc
 .PHONY: src-rc
