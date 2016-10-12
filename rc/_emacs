@@ -197,7 +197,7 @@
 (global-set-key "\M-p"     'scroll-down-1)
 (global-set-key "\M-n"     'scroll-up-1)
 (global-set-key "\M-g"     'goto-line)
-;(global-set-key "\M-o"     'overwrite-mode)
+(global-set-key "\C-\M-o"  'overwrite-mode) ; default: split-line
 (global-set-key "\C-x="    'what-line)
 (global-set-key "\C-x "    'just-one-space)
 (global-set-key "\M-#"     'insert-date)

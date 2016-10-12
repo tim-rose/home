@@ -28,8 +28,6 @@
         xa = commit -a -m
         a = add
         master = checkout master
-        url = !git config --list | sed -ne '/^remote.origin.url/s/.*=//p'
         h = log --graph --pretty='format:%C(bold)%h%C(cyan)%d%Creset %aD %Cgreen%an%Creset %s'
         hr = log --graph --pretty='format:%C(bold)%h%C(cyan)%d%Creset %ar %Cgreen%an%Creset %s'
         shbr = for-each-ref --format='%(refname:short) <- %(upstream:short)' refs/heads
-t

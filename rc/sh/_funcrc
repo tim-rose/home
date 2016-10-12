@@ -13,7 +13,12 @@ find0() { find "$@" -print0; }
 #
 # recursively() --Run a command on all files in this directory and subdirs.
 #
-recursively() { find . -type f -print0 | xargs -0 "$@"; }
+recursively() { find * -type f -print0 | xargs -0 "$@"; }
+
+#
+# quietly() --Run a command, discarding stdout+stderr.
+#
+quietly() { "$@"; } >/dev/null 2>&1
 
 #
 # calc() --Echo a calculation result.

@@ -78,7 +78,10 @@ set_prompt()
     if [ "$SSH_CONNECTION" ]; then fg=36; else fg=32; fi
 
     # privilege customisation: root=yellow/red
-    case $(id) in *0?root?*) fg=33; bg=41;; *) bg=;; esac
+    case $(id) in
+	*[=,]0\(*)	fg=33; bg=41;;
+        *)		bg=;;
+    esac
 
     # finalise fg, bg "colours"
     if [ "$bg" ]; then
@@ -111,9 +114,14 @@ set_prompt()
 	    PS2=': > '
 	    ;;
     esac
-
+    #
+    # Gnome terminal seems a bit buggy wrt its cursor, which
+    # seems to disappear(!) often.  The following command string
+    # set its colour (not possible any other way), which has
+    # the side-effect of making it visible.
+    #
     if [ "$DESKTOP_SESSION" = "gnome-classic" ]; then
-	printf '\033]12;red\007'	# gnome: set red cursor (erk!)
+	printf '$PS1\[\a]12;red\a\]'	# gnome: set red cursor (erk!)
     fi
 }
 set_prompt

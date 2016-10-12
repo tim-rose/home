@@ -11,7 +11,7 @@ install: $(rootdir)/.bashrc-$(HOSTNAME)
 
 $(rootdir)/.%:	_%;		$(INSTALL_FILE)	$? $@
 
-$(rootdir)/.bashrc-$(HOSTNAME): Makefile
+$(rootdir)/.bashrc-$(HOSTNAME):
 	echo "# custom settings for $(HOSTNAME)" >$@
 
 src:    src-rc
