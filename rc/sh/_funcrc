@@ -41,4 +41,4 @@ pdfman() {
 #
 # tgrep() --"table" grep; print the first (header) line, and matching others.
 #
-tgrep() { local tag=$1; shift; cat $* |sed -ne1p -e "/$tag/p"; }
+tgrep() { local tag=$1; shift; cat "$@" |sed -ne1p -e "/$tag/p"; }

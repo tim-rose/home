@@ -29,7 +29,8 @@ fi
 #
 vcs_status()
 {
-    git branch 2>/dev/null | sed -ne '/^[*]/s/^[*] */:/p'
+    git branch 2>/dev/null |
+	sed -ne 's/ detached at /@/' -e '/^[*]/s/^[*] */:/p'
 }
 
 #
@@ -67,6 +68,8 @@ cmd_status()
 # REVISIT: disable apple-term's "represented file" stuff?:
 # \033]6;file-url\007 \033]7;file-url\007
 #
+# TODO: show shell level (SHLVL)
+#
 set_prompt()
 {
     local fg= bg= window_title= mode=
@@ -90,6 +93,9 @@ set_prompt()
 	mode="\e[${fg};1m"
     fi
 
+    if [ "$SHLVL" != '1' ]; then
+	sh_level=":$SHLVL"
+    fi
     #
     # terminal customisation: if supported:
     #  * show additional info in title bar
@@ -100,17 +106,17 @@ set_prompt()
 	xterm*|rxvt*|dtterm*|cygwin)
 	    PROMPT_COMMAND="cmd_status"
 	    window_title='\[\e]1;\h\007\e]2;\u@\h \w\007\]'
-            PS1="$window_title: [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
+            PS1="$window_title: [\[$mode\]\h$vcs_prompt$sh_level\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[;m\]"
 	    ;;
 	ansi|linux|vt[0-9]*)	# colourful prompt only
 	    PROMPT_COMMAND="cmd_status"
-            PS1=": [\[$mode\]\h$vcs_prompt\[\e[m\]]; "
+            PS1=": [\[$mode\]\h$vcs_prompt$sh_level\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[;m\]"
 	    ;;
 	*)				# display hostname in prompt
 	    PROMPT_COMMAND="cmd_status \$?"
-            PS1=': [\h$vcs_prompt]; '
+            PS1=': [\h$vcs_prompt$sh_level]; '
 	    PS2=': > '
 	    ;;
     esac
