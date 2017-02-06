@@ -41,7 +41,7 @@ cmd_status()
     local status=$? reason= signal= signal_name=
 
     if [ $status -eq 0 ]; then
-	return
+	return			# command succeeded, do nothing
     fi
     if [ $status -lt 128 ]; then
 	reason="exit status: $status"
@@ -66,7 +66,7 @@ cmd_status()
 # Note: this function is removed after it is used.
 #
 # REVISIT: disable apple-term's "represented file" stuff?:
-# \033]6;file-url\007 \033]7;file-url\007
+# \033]6;document-url\007 \033]7;directory-url\007
 #
 # TODO: show shell level (SHLVL)
 #
@@ -102,20 +102,18 @@ set_prompt()
     #  * show VCS status/info
     #  * adjust fg/bg as per above customisations
     #
+    PROMPT_COMMAND="cmd_status${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
     case "$TERM" in
 	xterm*|rxvt*|dtterm*|cygwin)
-	    PROMPT_COMMAND="cmd_status"
-	    window_title='\[\e]1;\h\007\e]2;\u@\h \w\007\]'
+	    window_title='\[\e]1;\h\007\e]2;\u@\h \w${PROJECT:+ [$PROJECT]}\007\]'
             PS1="$window_title: [\[$mode\]\h$vcs_prompt$sh_level\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[;m\]"
 	    ;;
 	ansi|linux|vt[0-9]*)	# colourful prompt only
-	    PROMPT_COMMAND="cmd_status"
             PS1=": [\[$mode\]\h$vcs_prompt$sh_level\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[;m\]"
 	    ;;
 	*)				# display hostname in prompt
-	    PROMPT_COMMAND="cmd_status \$?"
             PS1=': [\h$vcs_prompt$sh_level]; '
 	    PS2=': > '
 	    ;;
@@ -127,7 +125,7 @@ set_prompt()
     # the side-effect of making it visible.
     #
     if [ "$DESKTOP_SESSION" = "gnome-classic" ]; then
-	printf '$PS1\[\a]12;red\a\]'	# gnome: set red cursor (erk!)
+	printf '\033]12;red\a'	# gnome: set red cursor (erk!)
     fi
 }
 set_prompt
