@@ -33,6 +33,14 @@ vcs_status()
 	sed -ne 's/ detached at /@/' -e '/^[*]/s/^[*] */:/p'
 }
 
+job_status()
+{
+    local jobs=$(jobs)
+    if [ "$jobs" ]; then
+	echo '+'
+    fi
+}
+
 #
 # cmd_status() --Print the status of the previous command, if it failed.
 #
@@ -68,31 +76,27 @@ cmd_status()
 # REVISIT: disable apple-term's "represented file" stuff?:
 # \033]6;document-url\007 \033]7;directory-url\007
 #
-# TODO: show shell level (SHLVL)
-#
 set_prompt()
 {
-    local fg= bg= window_title= mode=
-    if [ "$VCS" = "git" ]; then
-	vcs_prompt="\$(vcs_status)"
-    fi
+    local fg=32 		# green
+    local bg= window_title= mode= sh_level= prompt=
 
     # local/remote customisation: local=green, remote=cyan
-    if [ "$SSH_CONNECTION" ]; then fg=36; else fg=32; fi
+    if [ "$SSH_CONNECTION" ]; then
+	fg=36
+    fi
 
     # privilege customisation: root=yellow/red
     case $(id) in
 	*[=,]0\(*)	fg=33; bg=41;;
-        *)		bg=;;
     esac
 
     # finalise fg, bg "colours"
-    if [ "$bg" ]; then
-	mode="\e[${fg};${bg};1m"
-    else
-	mode="\e[${fg};1m"
-    fi
+    mode="\e[${fg}${bg:+;$bg};1m"
 
+    if [ "$VCS" = "git" ]; then
+	vcs_prompt="\$(vcs_status)"
+    fi
     if [ "$SHLVL" != '1' ]; then
 	sh_level=":$SHLVL"
     fi
@@ -103,18 +107,19 @@ set_prompt()
     #  * adjust fg/bg as per above customisations
     #
     PROMPT_COMMAND="cmd_status${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+    prompt="\h$vcs_prompt$sh_level\$(job_status)"
     case "$TERM" in
 	xterm*|rxvt*|dtterm*|cygwin)
 	    window_title='\[\e]1;\h\007\e]2;\u@\h \w${PROJECT:+ [$PROJECT]}\007\]'
-            PS1="$window_title: [\[$mode\]\h$vcs_prompt$sh_level\[\e[m\]]; "
-            PS2="\[\e[36m\]: > \[\e[;m\]"
+            PS1="$window_title: [\[$mode\]$prompt\[\e[m\]]; "
+            PS2="\[\e[36m\]: > \[\e[m\]"
 	    ;;
 	ansi|linux|vt[0-9]*)	# colourful prompt only
-            PS1=": [\[$mode\]\h$vcs_prompt$sh_level\[\e[m\]]; "
-            PS2="\[\e[36m\]: > \[\e[;m\]"
+            PS1=": [\[$mode\]$prompt\[\e[m\]]; "
+            PS2="\[\e[36m\]: > \[\e[m\]"
 	    ;;
 	*)				# display hostname in prompt
-            PS1=': [\h$vcs_prompt$sh_level]; '
+            PS1=': [$prompt]; '
 	    PS2=': > '
 	    ;;
     esac
