@@ -15,8 +15,5 @@ SED_SRC = csv-to-html.sed
 
 include devkit.mk
 
-install:	install-shell
-
-uninstall:	uninstall-this
-uninstall-this:
-	$(RM) $(SH_SRC:%.sh=$(bindir)/%) $(SED_SRC:%.sed=$(bindir)/%)
+install:	install-all
+uninstall:	uninstall-all
