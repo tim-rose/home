@@ -3,12 +3,15 @@
 #
 # Contents:
 # vcs_status() --Show the current git branch, if any.
+# job_status() --Show the presence of background jobs.
 # cmd_status() --Print the status of the previous command, if it failed.
 # set_prompt() -- Customise the user prompt.
 #
 # Remarks:
-# All this script does is to set up a fairly elaborate, colourful
-# shell prompt.  It does this with a few helper functions.
+
+# This script sets up a fairly elaborate, colourful shell prompt that
+# displays various status indications in the prompt itself, and in the
+# terminal's window title.
 #
 #date "+.bashrc: %c"
 umask 002
@@ -33,10 +36,14 @@ vcs_status()
 	sed -ne 's/ detached at /@/' -e '/^[*]/s/^[*] */:/p'
 }
 
+#
+# job_status() --Show the presence of background jobs.
+#
 job_status()
 {
     local jobs=$(jobs)
     if [ "$jobs" ]; then
+	# printf '\xe2\x97\x8f\n'	# black circle
 	echo '+'
     fi
 }
@@ -69,18 +76,24 @@ cmd_status()
 # Remarks:
 # Set main prompt, to ": [<stuff>]; ". Note, this prompt is
 # syntactally a shell nop, so complete lines can be selected and
-# pasted for re-execution.
+# pasted for re-execution.  The prompt colour indicates whether
+# the session is local/remote, and "privileged" (i.e. root).
 #
 # Note: this function is removed after it is used.
 #
 # REVISIT: disable apple-term's "represented file" stuff?:
-# \033]6;document-url\007 \033]7;directory-url\007
+# \033]6;document-url\007
+# \033]7;directory-url\007
+#
+# Also:
+# \033]1;tab-title\007
+# \033]2;window-title\007
 #
 set_prompt()
 {
-    local fg=32 		# green
+    local fg=32 		# default prompt colour: green
     local bg= window_title= mode= sh_level= prompt=
-
+    local unicode_star=$(printf '\xe2\x98\x85')
     # local/remote customisation: local=green, remote=cyan
     if [ "$SSH_CONNECTION" ]; then
 	fg=36
@@ -102,15 +115,17 @@ set_prompt()
     fi
     #
     # terminal customisation: if supported:
-    #  * show additional info in title bar
+    #  * show additional user, host, directory and project in title bar
     #  * show VCS status/info
+    #  * show shell level, presence of background tasks
     #  * adjust fg/bg as per above customisations
     #
     PROMPT_COMMAND="cmd_status${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
     prompt="\h$vcs_prompt$sh_level\$(job_status)"
     case "$TERM" in
 	xterm*|rxvt*|dtterm*|cygwin)
-	    window_title='\[\e]1;\h\007\e]2;\u@\h \w${PROJECT:+ [$PROJECT]}\007\]'
+	    project_status="\${PROJECT:+ $unicode_star\$PROJECT}"
+	    window_title="\[\e]1;\h\007\e]2;\u@\h \w$project_status\007\]"
             PS1="$window_title: [\[$mode\]$prompt\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[m\]"
 	    ;;
@@ -124,17 +139,17 @@ set_prompt()
 	    ;;
     esac
     #
-    # Gnome terminal seems a bit buggy wrt its cursor, which
-    # seems to disappear(!) often.  The following command string
-    # set its colour (not possible any other way), which has
-    # the side-effect of making it visible.
+    # Gnome terminal seems a bit buggy wrt its cursor, which seems to
+    # disappear(!) often.  The following command string set its colour
+    # (not possible any other way), which has the useful side-effect
+    # of making it visible again.
     #
     if [ "$DESKTOP_SESSION" = "gnome-classic" ]; then
 	printf '\033]12;red\a'	# gnome: set red cursor (erk!)
     fi
 }
-set_prompt
-unset set_prompt
+set_prompt			# use it
+unset set_prompt		# ...and lose it.
 
 #
 # load any further customisations from the etc directory, and bashrc-<host>
