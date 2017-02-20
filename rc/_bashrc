@@ -39,6 +39,11 @@ vcs_status()
 #
 # job_status() --Show the presence of background jobs.
 #
+# Remarks:
+# Some systems throw off a background task as part of shell setup (I'm
+# looking at you, Darwin), that usually shows as a "done" job for
+# the initial prompt.
+#
 job_status()
 {
     local jobs=$(jobs)
@@ -74,7 +79,7 @@ cmd_status()
 # set_prompt() -- Customise the user prompt.
 #
 # Remarks:
-# Set main prompt, to ": [<stuff>]; ". Note, this prompt is
+# Set main prompt, to ": [<stuff>]; ". Note taht this prompt is
 # syntactally a shell nop, so complete lines can be selected and
 # pasted for re-execution.  The prompt colour indicates whether
 # the session is local/remote, and "privileged" (i.e. root).
@@ -94,9 +99,9 @@ set_prompt()
     local fg=32 		# default prompt colour: green
     local bg= window_title= mode= sh_level= prompt=
     local unicode_star=$(printf '\xe2\x98\x85')
-    # local/remote customisation: local=green, remote=cyan
+
     if [ "$SSH_CONNECTION" ]; then
-	fg=36
+	fg=36	# local/remote customisation: local=green, remote=cyan
     fi
 
     # privilege customisation: root=yellow/red
@@ -115,7 +120,7 @@ set_prompt()
     fi
     #
     # terminal customisation: if supported:
-    #  * show additional user, host, directory and project in title bar
+    #  * show user, host, directory and project in title bar
     #  * show VCS status/info
     #  * show shell level, presence of background tasks
     #  * adjust fg/bg as per above customisations
@@ -124,7 +129,8 @@ set_prompt()
     prompt="\h$vcs_prompt$sh_level\$(job_status)"
     case "$TERM" in
 	xterm*|rxvt*|dtterm*|cygwin)
-	    project_status="\${PROJECT:+ $unicode_star\$PROJECT}"
+	    project_status="\${PROJECT:+ [\$PROJECT]}"
+	    #project_status="\${PROJECT:+ $unicode_star\$PROJECT}"
 	    window_title="\[\e]1;\h\007\e]2;\u@\h \w$project_status\007\]"
             PS1="$window_title: [\[$mode\]$prompt\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[m\]"
