@@ -55,9 +55,9 @@ PATH=/bin:/usr/bin
 export ENV_START="$(date '+.envrc: %c')"
 #echo $ENV_START >&2
 
-export HOSTNAME="$(uname -n)"
-export ARCH="$(uname -m|sed -e 's/i.86/i386/')"
-export OS="$(uname -s | tr A-Z a-z | sed -e 's/-[.0-9]*//')"
+export HOSTNAME=${HOSTNAME:-$(uname -n)}
+export ARCH=${ARCH:-$(uname -m|sed -e 's/i.86/i386/')}
+export OS=${OS:-$(uname -s | tr A-Z a-z | sed -e 's/-[.0-9]*//')}
 export USER=${USER:-$LOGNAME}
 
 PATH=$(prepend_path "$sys_path" \
@@ -66,8 +66,8 @@ PATH=$(prepend_path "$sys_path" \
     $HOME/local/bin $HOME/local/bin/$OS-$ARCH \
     /usr/local/*bin /usr/local/mysql/bin \
     /usr/local/opt/coreutils/libexec/gnubin \
-    /opt/local/libexec/gnubin /opt/*/bin /*bin /usr/*bin\
-    $HOME/local/libexec /usr/local/libexec /opt/*/libexec)
+    /Applications/MacPorts/*/Contents/MacOS/bin \
+    /opt/local/libexec/gnubin /opt/*/bin /*bin /usr/*bin)
 
 export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
     $HOME/local/lib /usr/local/lib /opt/local/lib \
@@ -79,6 +79,7 @@ export MANPATH=$(prepend_path "$MANPATH" \
     $HOME/local/man:$HOME/local/share/man \
     /usr/local/man /usr/local/share/man /usr/local/*/man \
      /usr/local/opt/coreutils/libexec/gnuman \
+    /Applications/MacPorts/*/Contents/Resources/man \
     /opt/*/share/man /opt/share/man \
     /usr/*/man /usr/man)
 #

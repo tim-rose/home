@@ -79,7 +79,7 @@ cmd_status()
 # set_prompt() -- Customise the user prompt.
 #
 # Remarks:
-# Set main prompt, to ": [<stuff>]; ". Note taht this prompt is
+# Set main prompt, to ": [<host>]; ". Note that this prompt is
 # syntactally a shell nop, so complete lines can be selected and
 # pasted for re-execution.  The prompt colour indicates whether
 # the session is local/remote, and "privileged" (i.e. root).
@@ -122,7 +122,8 @@ set_prompt()
     # terminal customisation: if supported:
     #  * show user, host, directory and project in title bar
     #  * show VCS status/info
-    #  * show shell level, presence of background tasks
+    #  * show shell level
+    #  * show presence of background jobs
     #  * adjust fg/bg as per above customisations
     #
     PROMPT_COMMAND="cmd_status${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
@@ -152,6 +153,9 @@ set_prompt()
     #
     if [ "$DESKTOP_SESSION" = "gnome-classic" ]; then
 	printf '\033]12;red\a'	# gnome: set red cursor (erk!)
+    fi
+    if [ $(uname -s) != 'Darwin' ]; then
+	printf '\033]6;\007\033]7;\007' # disable apple-term's represented file stuff
     fi
 }
 set_prompt			# use it
