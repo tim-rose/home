@@ -3,21 +3,25 @@
 #
 # Contents:
 # dirs_not_in_path() --Return a path-spec of "new" path elements.
+# $*                 --the list of directories to be added to the path
 # prepend_path()     --Merge two path-spec.s as a ":" separated list.
 #
 
 #
 # dirs_not_in_path() --Return a path-spec of "new" path elements.
 #
+# Parameters:
+# path --the current value of path
+# $*   --the list of directories to be added to the path
+#
 dirs_not_in_path()
 {
-    local path="$1"; shift
+    local path=":$1:"; shift
 
     for dir in "$@"; do
 	case "$path" in
-	$dir:*)		;;		# already at start of path
-	*:$dir:*)	;;		# already in the middle of path
-	*:$dir)		;;		# already at the end of path
+	*:$dir:*)
+	    ;;		# already in the path
 	*)
 	    if [ -d "$dir" ]; then
 		echo $dir
@@ -58,11 +62,9 @@ export ENV_START="$(date '+.envrc: %c')"
 export HOSTNAME=${HOSTNAME:-$(uname -n)}
 export ARCH=${ARCH:-$(uname -m|sed -e 's/i.86/i386/')}
 export OS=${OS:-$(uname -s | tr A-Z a-z | sed -e 's/-[.0-9]*//')}
-export USER=${USER:-$LOGNAME}
 
 PATH=$(prepend_path "$sys_path" \
     . $HOME/bin $HOME/bin/$OS-$ARCH \
-    $HOME/.rbenv/bin \
     $HOME/local/bin $HOME/local/bin/$OS-$ARCH \
     /usr/local/*bin /usr/local/mysql/bin \
     /usr/local/opt/coreutils/libexec/gnubin \
@@ -160,7 +162,7 @@ export LOG_COLORS='debug=36:notice=1:warning=1;33:err=1;31:crit=1;33;41:alert=1;
 # bn --byte number			(default: 32)
 # se --separator			(default: 36)
 #
-export GREP_COLORS='ms=36:mc=36:cx=2:fn=1'
+export GREP_COLORS='mt=1;33:cx=2:fn=36'
 export ACK_OPTIONS="--color-match=cyan --color-filename=bold --color-lineno=yellow --nogroup"
 
 export WIRESHARK_APP_DIR=/Applications/Extras
@@ -173,8 +175,6 @@ export CC=gcc
 export DEVKIT_HOME=/usr/local
 export VCS=git
 export PERL5LIB=$prefix/lib/perl5
-# export CVSROOT=:ext:cvs:/home/CVS	# CVS: those were the days, huh?
-# export CVS_RSH=ssh
 export RSYNC_RSH=ssh
 
 #export SVN_EDITOR=/usr/local/bin/svn-edit
@@ -200,8 +200,3 @@ export XFILESEARCHPATH="$HOME/lib/X11/1024x768/%N:/usr/X11R6/lib/X11/%T/%N"
 if [ -f $HOME/.envrc-$HOSTNAME ] ; then
     . $HOME/.envrc-$HOSTNAME
 fi
-
-#
-# RBENV
-#
-#eval "$(rbenv init - )"

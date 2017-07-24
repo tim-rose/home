@@ -1,4 +1,4 @@
-#
+#!/bin/sh
 # PROFILE --login commands.
 #
 # Remarks:
@@ -14,7 +14,7 @@ load_files()
 {
     for file; do
 	if [ -f $file ]; then
-	    # echo "loading $file" >&2
+	    # printf "loading %s\n" "$file" >&2
 	    . $file
 	fi
     done

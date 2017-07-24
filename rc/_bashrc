@@ -49,7 +49,7 @@ job_status()
     local jobs=$(jobs)
     if [ "$jobs" ]; then
 	# printf '\xe2\x97\x8f\n'	# black circle
-	echo '+'
+	printf '+'
     fi
 }
 
@@ -63,16 +63,24 @@ cmd_status()
     if [ $status -eq 0 ]; then
 	return			# command succeeded, do nothing
     fi
-    if [ $status -lt 128 ]; then
+    if [ $status -lt 126 ]; then
 	reason="exit status: $status"
     else
-	signal=$(($status-128))
-	if ! signal_name=$(kill -l $signal 2>/dev/null); then
-	    signal_name="unknown signal"
-	fi
-	reason="caught signal: $signal ($signal_name)"
+	case "$status" in
+	126) reason='cannot execute';;
+	127) reason='command not found';;
+	128) reason='exit <invalid>';;
+	255) reason='exit <out-of-range>';;
+        *)
+	    signal=$(($status-128))
+	    if ! signal_name=$(kill -l $signal 2>/dev/null); then
+		signal_name="unknown signal"
+	    fi
+	    reason="caught signal: $signal ($signal_name)"
+	    ;;
+	esac
     fi
-    printf "\033[2m# process %s\033[m\n" "$reason"
+    printf "\033[2m#%s\033[m\n" "$reason"
 }
 
 #
@@ -80,7 +88,7 @@ cmd_status()
 #
 # Remarks:
 # Set main prompt, to ": [<host>]; ". Note that this prompt is
-# syntactally a shell nop, so complete lines can be selected and
+# syntactally a shell NOP, so complete lines can be selected and
 # pasted for re-execution.  The prompt colour indicates whether
 # the session is local/remote, and "privileged" (i.e. root).
 #
@@ -98,16 +106,16 @@ set_prompt()
 {
     local fg=32 		# default prompt colour: green
     local bg= window_title= mode= sh_level= prompt=
-    local unicode_star=$(printf '\xe2\x98\x85')
+    # local unicode_star=$(printf '\xe2\x98\x85')
 
     if [ "$SSH_CONNECTION" ]; then
 	fg=36	# local/remote customisation: local=green, remote=cyan
     fi
 
     # privilege customisation: root=yellow/red
-    case $(id) in
-	*[=,]0\(*)	fg=33; bg=41;;
-    esac
+    if [ "$EUID" = "0" ]; then
+	fg=33; bg=41;
+    fi
 
     # finalise fg, bg "colours"
     mode="\e[${fg}${bg:+;$bg};1m"
@@ -147,11 +155,12 @@ set_prompt()
     esac
     #
     # Gnome terminal seems a bit buggy wrt its cursor, which seems to
-    # disappear(!) often.  The following command string set its colour
+    # disappear(!) often.  The following command string sets its colour
     # (not possible any other way), which has the useful side-effect
     # of making it visible again.
     #
-    if [ "$DESKTOP_SESSION" = "gnome-classic" ]; then
+    if [ "$DESKTOP_SESSION" = "gnome-classic" -o \
+         "$SESSIONTYPE" = "gnome-session" -o ]; then
 	printf '\033]12;red\a'	# gnome: set red cursor (erk!)
     fi
     if [ $(uname -s) != 'Darwin' ]; then

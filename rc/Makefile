@@ -12,7 +12,7 @@ install: $(rootdir)/.bashrc-$(HOSTNAME)
 $(rootdir)/.%:	_%;		$(INSTALL_FILE)	$? $@
 
 $(rootdir)/.bashrc-$(HOSTNAME):
-	echo "# custom settings for $(HOSTNAME)" >$@
+	printf "# custom settings for %s\n" "$(HOSTNAME)" >$@
 
 src:    src-rc
 .PHONY: src-rc
