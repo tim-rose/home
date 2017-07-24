@@ -160,7 +160,7 @@ set_prompt()
     # of making it visible again.
     #
     if [ "$DESKTOP_SESSION" = "gnome-classic" -o \
-         "$SESSIONTYPE" = "gnome-session" -o ]; then
+         "$SESSIONTYPE" = "gnome-session" ]; then
 	printf '\033]12;red\a'	# gnome: set red cursor (erk!)
     fi
     if [ $(uname -s) != 'Darwin' ]; then
