@@ -2,19 +2,35 @@
 #
 # COLORTEST --Print terminal colour information as a test-pattern of swatches.
 #
-PATH=$PATH:$HOME/libexec:/usr/local/libexec
 . midden
-require log getopt
+require log
+require getopt
+
+opts="c.colors=8;$LOG_GETOPTS"
 
 usage() { getopt_usage "colortest [-c colors]" "$1"; }
-opts="c.colors=8;$LOG_GETOPTS"
+
 eval $(getopt_long_args -d "$opts" "$@" || usage "$opts" >&2)
 log_getopts
 
 debug 'colors=%d' $colors
 
-colorise_8() { printf "\033[%d;%dm$3\033[m" $1 $2 $4; }
-colorise_256()   { printf "\033[38;05;%d;48;05;%dm$3\033[m" $1 $2 $4; }
+colorise_8()
+{
+    local fg=$1 bg=$2 fmt=$3 label=$4
+
+    printf "\033[%d;%dm" $fg $bg
+    printf "$fmt" "$label"
+    printf  "\033[m"
+}
+colorise_256()
+{
+    local fg=$1 bg=$2 fmt=$3 label=$4
+
+    printf "\033[38;05;%d;48;05;%dm" $fg $bg
+    printf "$fmt" "$label"
+    printf  "\033[m"
+}
 
 swatch_8()
 {

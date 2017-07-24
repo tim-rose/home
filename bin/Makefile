@@ -8,8 +8,8 @@
 prefix = $(HOME)
 language	= sh
 
-SH_SRC = auto-ssh.sh choose.sh cmpmv.sh colortest.sh db.sh dbls.sh \
-    lesspipe.sh mergedir.sh rpmpan.sh set-font-smoothing.sh \
+SH_SRC = auto-ssh.sh choose.sh cmpmv.sh colortest.sh db.sh \
+    dbls.sh lesspipe.sh mergedir.sh set-font-smoothing.sh \
     svn-viewdiff.sh trash.sh vcs.sh whichis.sh
 SED_SRC = csv-to-html.sed
 
