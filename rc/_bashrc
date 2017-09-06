@@ -80,7 +80,7 @@ cmd_status()
 	    ;;
 	esac
     fi
-    printf "\033[2m#%s\033[m\n" "$reason"
+    printf "\033[2m# %s\033[m\n" "$reason"
 }
 
 #
@@ -153,20 +153,8 @@ set_prompt()
 	    PS2=': > '
 	    ;;
     esac
-    #
-    # Gnome terminal seems a bit buggy wrt its cursor, which seems to
-    # disappear(!) often.  The following command string sets its colour
-    # (not possible any other way), which has the useful side-effect
-    # of making it visible again.
-    #
-    if [ "$DESKTOP_SESSION" = "gnome-classic" -o \
-         "$SESSIONTYPE" = "gnome-session" ]; then
-	printf '\033]12;red\a'	# gnome: set red cursor (erk!)
-    fi
-    if [ $(uname -s) != 'Darwin' ]; then
-	printf '\033]6;\007\033]7;\007' # disable apple-term's represented file stuff
-    fi
 }
+
 set_prompt			# use it
 unset set_prompt		# ...and lose it.
 

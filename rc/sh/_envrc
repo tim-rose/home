@@ -3,7 +3,6 @@
 #
 # Contents:
 # dirs_not_in_path() --Return a path-spec of "new" path elements.
-# $*                 --the list of directories to be added to the path
 # prepend_path()     --Merge two path-spec.s as a ":" separated list.
 #
 
@@ -82,7 +81,7 @@ export MANPATH=$(prepend_path "$MANPATH" \
     /usr/local/man /usr/local/share/man /usr/local/*/man \
      /usr/local/opt/coreutils/libexec/gnuman \
     /Applications/MacPorts/*/Contents/Resources/man \
-    /opt/*/share/man /opt/share/man \
+    /opt/local/libexec/gnubin/man /opt/*/share/man /opt/share/man \
     /usr/*/man /usr/man)
 #
 # Forget the path manipulation routines prepend_path(), dirs_not_in_path();

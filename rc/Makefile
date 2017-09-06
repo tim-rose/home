@@ -9,7 +9,7 @@ include devkit.mk
 install: $(RC_SRC:_%=$(rootdir)/.%)
 install: $(rootdir)/.bashrc-$(HOSTNAME)
 
-$(rootdir)/.%:	_%;		$(INSTALL_FILE)	$? $@
+$(rootdir)/.%:	_%;		$(INSTALL_DATA)	$? $@
 
 $(rootdir)/.bashrc-$(HOSTNAME):
 	printf "# custom settings for %s\n" "$(HOSTNAME)" >$@

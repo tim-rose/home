@@ -13,7 +13,11 @@
 load_files()
 {
     for file; do
-	if [ -f $file ]; then
+	case "$file" in
+	    /*) ;;		# already an absolute filename
+	    *) file=$HOME/$file;;
+	esac
+	if [ -e $file ]; then
 	    # printf "loading %s\n" "$file" >&2
 	    . $file
 	fi
@@ -23,5 +27,19 @@ load_files()
 shell=$(ps -o comm= $$ 2>/dev/null | sed -e 's/^-//') # guess current shell
 export ENV=${ENV:-$HOME/.${shell:-bash}rc}	# fallback to bash
 
-load_files $HOME/.envrc $HOME/.ttyrc $HOME/.displayrc $ENV
+load_files .envrc .ttyrc .displayrc $ENV
 unset shell load_files
+
+#
+# Gnome terminal seems a bit buggy wrt its cursor, which seems to
+# disappear(!) often.  The following command string sets its colour
+# (not possible any other way), which has the useful side-effect
+# of making it visible again.
+#
+if [ "$DESKTOP_SESSION" = "gnome-classic" \
+     -o "$SESSIONTYPE" = "gnome-session" ]; then
+    printf '\033]12;red\a'	# gnome: set red cursor (erk!)
+fi
+if [ $(uname -s) != 'Darwin' ]; then
+    printf '\033]6;\007\033]7;\007' # disable apple-term's represented file stuff
+fi
