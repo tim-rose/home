@@ -113,6 +113,9 @@ export LESS=-MiR
 if [ -x "$HOME/bin/lesspipe" ]; then
     export LESSOPEN="|$HOME/bin/lesspipe %s"
 fi
+# map underline to italics
+export LESS_TERMCAP_us=$(printf '\033[3m')
+export LESS_TERMCAP_ue=$(printf '\033[m')
 
 #
 # Colour options for listing files and directories with ls(1):

@@ -39,6 +39,9 @@ vcs_status()
 #
 # job_status() --Show the presence of background jobs.
 #
+# Output:
+# The text indication (and count) of background jobs.
+#
 # Remarks:
 # Some systems throw off a background task as part of shell setup (I'm
 # looking at you, Darwin), that usually shows as a "done" job for
@@ -46,10 +49,23 @@ vcs_status()
 #
 job_status()
 {
-    local jobs=$(jobs)
-    if [ "$jobs" ]; then
-	# printf '\xe2\x97\x8f\n'	# black circle
-	printf '+'
+    local jobs=$(jobs | wc -l)
+    if [ "$jobs" -ne 0 ]; then
+	printf '+%d' "$jobs"
+    fi
+}
+
+#
+# dir_status() --Show the number of items in the directory stack.
+#
+# Output:
+# The text indication (and count) of background jobs.
+#
+dir_status()
+{
+    local dirs=$(dirs -p | wc -l)
+    if [ "$dirs" -ne 1 ]; then
+	printf '[%d]' "$dirs"
     fi
 }
 
@@ -80,7 +96,7 @@ cmd_status()
 	    ;;
 	esac
     fi
-    printf "\033[2m# %s\033[m\n" "$reason"
+    printf "\033[2;3m# %s\033[m\n" "$reason"
 }
 
 #
@@ -135,7 +151,7 @@ set_prompt()
     #  * adjust fg/bg as per above customisations
     #
     PROMPT_COMMAND="cmd_status${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
-    prompt="\h$vcs_prompt$sh_level\$(job_status)"
+    prompt="\h$vcs_prompt$sh_level\$(job_status)\$(dir_status)"
     case "$TERM" in
 	xterm*|rxvt*|dtterm*|cygwin)
 	    project_status="\${PROJECT:+ [\$PROJECT]}"
