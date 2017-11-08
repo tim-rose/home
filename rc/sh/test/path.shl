@@ -1,0 +1,100 @@
+#!/bin/sh
+#
+# PATH.SHL --Path utilites.
+#
+# Contents:
+# filter_path()     --Return a path-spec of items already in path.
+# filter_out_path() --Return a path-spec of items not in path.
+# prepend_path()    --Prepend a list of dirs to a path.
+# append_path()     --Append a list of dirs to a path.
+#
+# Remarks:
+# These routines provide facilities for manipulating "path"  variables
+# (e.g. PATH, MANPATH etc.) that are structured as ':' separated values.
+#
+
+#
+# filter_path() --Return a path-spec of items already in path.
+#
+# Parameters:
+# path --the current value of path
+# ...   --the list of directories to be added to the path
+#
+filter_path()
+{
+    local path=":$1:"; shift
+    local dirs=
+
+    for dir in "$@"; do
+	case "$path" in
+	*:$dir:*)		# already in the path
+	    if [ -d "$dir" ]; then
+		dirs="${dirs:+$dirs:}$dir"
+	    fi
+	    ;;
+	*)
+	    ;;
+	esac
+    done
+    echo "$dirs"
+}
+
+#
+# filter_out_path() --Return a path-spec of items not in path.
+#
+# Parameters:
+# path --the current value of path
+# ...   --the list of directories to be added to the path
+#
+filter_out_path()
+{
+    local path=":$1:"; shift
+    local dirs=
+
+    for dir in "$@"; do
+	case "$path" in
+	*:$dir:*)
+	    ;;		# already in the path
+	*)
+	    if [ -d "$dir" ]; then
+		dirs="${dirs:+$dirs:}$dir"
+	    fi
+	    ;;
+	esac
+    done
+    echo "$dirs"
+}
+
+#
+# prepend_path() --Prepend a list of dirs to a path.
+#
+# Parameters:
+# path --the path, as a ":" separated list of directories
+# ...   --some directories to be prepended to path
+#
+prepend_path()
+{
+    local path=
+
+    path="$(filter_out_path "$@"):$1"
+    path=${path#:}		# strip initial empty item
+    path=${path%:}		# strip trailing empty item
+    echo "$path"
+}
+
+#
+# append_path() --Append a list of dirs to a path.
+#
+# Parameters:
+# path --the path, as a ":" separated list of directories
+# ...   --some directories to be appended to path
+#
+append_path()
+{
+    local path=
+
+    path="$1:$(filter_out_path "$@")"
+    path=${path#:}		# strip initial empty item
+    path=${path%:}		# strip trailing empty item
+    echo "$path"
+}

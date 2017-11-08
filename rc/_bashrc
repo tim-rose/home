@@ -4,6 +4,7 @@
 # Contents:
 # vcs_status() --Show the current git branch, if any.
 # job_status() --Show the presence of background jobs.
+# dir_status() --Show the number of items in the directory stack.
 # cmd_status() --Print the status of the previous command, if it failed.
 # set_prompt() -- Customise the user prompt.
 #
@@ -122,15 +123,15 @@ set_prompt()
 {
     local fg=32 		# default prompt colour: green
     local bg= window_title= mode= sh_level= prompt=
-    # local unicode_star=$(printf '\xe2\x98\x85')
 
+    # local/remote customisation: local=green, remote=cyan
     if [ "$SSH_CONNECTION" ]; then
-	fg=36	# local/remote customisation: local=green, remote=cyan
+	fg=36
     fi
 
     # privilege customisation: root=yellow/red
     if [ "$EUID" = "0" ]; then
-	fg=33; bg=41;
+	fg=33 bg=41
     fi
 
     # finalise fg, bg "colours"
@@ -155,7 +156,6 @@ set_prompt()
     case "$TERM" in
 	xterm*|rxvt*|dtterm*|cygwin)
 	    project_status="\${PROJECT:+ [\$PROJECT]}"
-	    #project_status="\${PROJECT:+ $unicode_star\$PROJECT}"
 	    window_title="\[\e]1;\h\007\e]2;\u@\h \w$project_status\007\]"
             PS1="$window_title: [\[$mode\]$prompt\[\e[m\]]; "
             PS2="\[\e[36m\]: > \[\e[m\]"

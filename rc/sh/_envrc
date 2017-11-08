@@ -3,6 +3,7 @@
 #
 # Contents:
 # dirs_not_in_path() --Return a path-spec of "new" path elements.
+# $*                 --the list of directories to be added to the path
 # prepend_path()     --Merge two path-spec.s as a ":" separated list.
 #
 
