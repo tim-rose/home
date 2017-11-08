@@ -1,0 +1,5 @@
+prefix = $(HOME)
+language = sh
+SH_SRC = grep.sh open.sh
+include devkit.mk
+install: install-all
