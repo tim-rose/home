@@ -53,10 +53,12 @@
 (when window-system
   (tool-bar-mode 0)
   (setq default-frame-alist
-	(append '((foreground-color . "white")
+	(append '(
+		  (alpha . (95 . 85))
+		  (foreground-color . "white")
 		  (background-color . "black")
 		  (cursor-color . "green"))
-		default-frame-alist))
+	 default-frame-alist))
 
   (setq font-lock-maximum-decoration t)
 

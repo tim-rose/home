@@ -2,7 +2,7 @@
 # .BASHRC (->.KSHRC) --RC file for (interactive) Bourne-like shells.
 #
 # Contents:
-# vcs_status() --Show the current git branch, if any.
+# git_status() --Show the current git branch, if any.
 # job_status() --Show the presence of background jobs.
 # dir_status() --Show the number of items in the directory stack.
 # cmd_status() --Print the status of the previous command, if it failed.
@@ -29,9 +29,9 @@ if [ -f /etc/bashrc ]; then
 fi
 
 #
-# vcs_status() --Show the current git branch, if any.
+# git_status() --Show the current git branch, if any.
 #
-vcs_status()
+git_status()
 {
     git branch 2>/dev/null |
 	sed -ne 's/ detached at /@/' -e '/^[*]/s/^[*] */:/p'
@@ -51,6 +51,7 @@ vcs_status()
 job_status()
 {
     local jobs=$(jobs | wc -l)
+
     if [ "$jobs" -ne 0 ]; then
 	printf '+%d' "$jobs"
     fi
@@ -65,8 +66,9 @@ job_status()
 dir_status()
 {
     local dirs=$(dirs -p | wc -l)
+
     if [ "$dirs" -ne 1 ]; then
-	printf '[%d]' "$dirs"
+	printf '/%d' "$dirs"
     fi
 }
 
@@ -134,12 +136,9 @@ set_prompt()
 	fg=33 bg=41
     fi
 
-    # finalise fg, bg "colours"
+    # finalise prompt foreground, background colours
     mode="\e[${fg}${bg:+;$bg};1m"
 
-    if [ "$VCS" = "git" ]; then
-	vcs_prompt="\$(vcs_status)"
-    fi
     if [ "$SHLVL" != '1' ]; then
 	sh_level=":$SHLVL"
     fi
@@ -152,17 +151,17 @@ set_prompt()
     #  * adjust fg/bg as per above customisations
     #
     PROMPT_COMMAND="cmd_status${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
-    prompt="\h$vcs_prompt$sh_level\$(job_status)\$(dir_status)"
+    prompt="\h\$(git_status)$sh_level\$(job_status)\$(dir_status)"
     case "$TERM" in
 	xterm*|rxvt*|dtterm*|cygwin)
 	    project_status="\${PROJECT:+ [\$PROJECT]}"
 	    window_title="\[\e]1;\h\007\e]2;\u@\h \w$project_status\007\]"
-            PS1="$window_title: [\[$mode\]$prompt\[\e[m\]]; "
-            PS2="\[\e[36m\]: > \[\e[m\]"
+            PS1="\[\e[m\]$window_title: [\[$mode\]$prompt\[\e[m\]]; "
+            PS2="\[\e[;36m\]: > \[\e[m\]"
 	    ;;
 	ansi|linux|vt[0-9]*)	# colourful prompt only
-            PS1=": [\[$mode\]$prompt\[\e[m\]]; "
-            PS2="\[\e[36m\]: > \[\e[m\]"
+            PS1="\[\e[m\]: [\[$mode\]$prompt\[\e[m\]]; "
+            PS2="\[\e[;36m\]: > \[\e[m\]"
 	    ;;
 	*)				# display hostname in prompt
             PS1=': [$prompt]; '

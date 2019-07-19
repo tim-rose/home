@@ -6,8 +6,10 @@
 [core]
 	quotepath = false
 	excludesfile = ~/.gitignore
+# windows... autocrlf = true
 	autocrlf = input
-	safecrlf = true
+	safecrlf = warn
+	eol = native
 [push]
 	default = simple
 [color]

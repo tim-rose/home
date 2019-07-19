@@ -66,10 +66,10 @@ export OS=${OS:-$(uname -s | tr A-Z a-z | sed -e 's/-[.0-9]*//')}
 PATH=$(prepend_path "$sys_path" \
     . $HOME/bin $HOME/bin/$OS-$ARCH \
     $HOME/local/bin $HOME/local/bin/$OS-$ARCH \
-    /usr/local/*bin /usr/local/mysql/bin \
+    /usr/local/*bin /usr/local/*/bin \
     /usr/local/opt/coreutils/libexec/gnubin \
     /Applications/MacPorts/*/Contents/MacOS/bin \
-    /opt/local/libexec/gnubin /opt/*/bin /*bin /usr/*bin)
+    /opt/local/libexec/gnubin /opt/*/sbin /opt/*/bin /usr/*bin /*bin)
 
 export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
     $HOME/local/lib /usr/local/lib /opt/local/lib \
@@ -80,7 +80,7 @@ export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
 export MANPATH=$(prepend_path "$MANPATH" \
     $HOME/local/man:$HOME/local/share/man \
     /usr/local/man /usr/local/share/man /usr/local/*/man \
-     /usr/local/opt/coreutils/libexec/gnuman \
+    /usr/local/opt/coreutils/libexec/gnuman \
     /Applications/MacPorts/*/Contents/Resources/man \
     /opt/local/libexec/gnubin/man /opt/*/share/man /opt/share/man \
     /usr/*/man /usr/man)
@@ -177,7 +177,8 @@ export EDITOR=vi
 export CC=gcc
 export DEVKIT_HOME=/usr/local
 export VCS=git
-export PERL5LIB=$prefix/lib/perl5
+export PERL5LIB=/usr/local/lib/perl5
+export PYTHONPATH=/usr/local/lib/python
 export RSYNC_RSH=ssh
 
 #export SVN_EDITOR=/usr/local/bin/svn-edit
