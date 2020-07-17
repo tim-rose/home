@@ -1,7 +1,7 @@
 #!/bin/sh
 # define function/aliases...
 #
-env()	{ command env | cat-v | sort; }
+env()	{ command env | cat -v | sort; }
 path()  { eval "echo \${${1:-PATH}}" | tr ':' '\012';  }
 less4()	{ less -x4 $*; }
 

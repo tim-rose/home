@@ -4,7 +4,7 @@
 prefix = $(HOME)
 MK_SRC = tasks.mk
 
-include devkit.mk
+include makeshift.mk
 
 install:	$(MK_SRC:%.mk=$(sysconfdir)/%.mk)
 

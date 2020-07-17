@@ -4,7 +4,7 @@
 prefix = $(HOME)
 SRC = a2psrc
 
-include devkit.mk
+include makeshift.mk
 
 install:	$(SRC:%=$(rootdir)/.a2ps/%)
 

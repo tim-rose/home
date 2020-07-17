@@ -5,7 +5,7 @@ prefix = $(HOME)
 vimdir = $(prefix)/.vim/colors
 SRC = custom.vim
 
-include devkit.mk
+include makeshift.mk
 
 install:	$(SRC:%=$(vimdir)/%)
 

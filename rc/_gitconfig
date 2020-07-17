@@ -12,6 +12,10 @@
 	eol = native
 [push]
 	default = simple
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true
 [color]
 	ui = auto
 [diff]

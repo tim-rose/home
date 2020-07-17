@@ -4,7 +4,7 @@
 prefix = $(HOME)
 RC_SRC = _aliasrc _envrc _funcrc
 
-include devkit.mk
+include makeshift.mk
 
 install:	$(RC_SRC:%=$(rootdir)/etc/sh/%)
 

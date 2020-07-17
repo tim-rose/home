@@ -13,7 +13,7 @@ SH_SRC = auto-ssh.sh choose.sh cmpmv.sh colortest.sh db.sh dbls.sh \
     whichis.sh
 SED_SRC = csv-to-html.sed
 
-include devkit.mk
+include makeshift.mk
 
 install:	install-all
 uninstall:	uninstall-all

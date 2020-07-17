@@ -2,7 +2,7 @@
 # Makefile --Build rules for installing emacs customisations.
 #
 # Remarks:
-# I'm avoiding using devkit's emacs lisp support because I want
+# I'm avoiding using makeshift's emacs lisp support because I want
 # this stuff to work (i.e. harmlessly install the files) even
 # if emacs isn't itself installed.
 #
@@ -10,7 +10,7 @@ prefix = $(HOME)
 emacsdir = $(rootdir)/.emacs.d/site-lisp
 ELISP_SRC = markdown-mode.el php-mode-improved.el
 
-include devkit.mk
+include makeshift.mk
 
 install:	$(ELISP_SRC:%.el=$(emacsdir)/%.el)
 

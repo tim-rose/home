@@ -4,7 +4,7 @@
 override prefix = $(HOME)
 RC_SRC = _bashrc _emacs _gitconfig _gitignore _profile _vimrc
 
-include devkit.mk
+include makeshift.mk
 
 install: $(RC_SRC:_%=$(rootdir)/.%)
 install: $(rootdir)/.bashrc-$(HOSTNAME)

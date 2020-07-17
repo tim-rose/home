@@ -9,7 +9,7 @@
 #  * cygwin's ps command is broken, so we do a fallback to bash.
 #
 #date "+.profile: %c"
-
+export BASH_SILENCE_DEPRECATION_WARNING=1
 load_files()
 {
     for file; do
