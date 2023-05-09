@@ -10,6 +10,8 @@
 	autocrlf = input
 	safecrlf = warn
 	eol = native
+[commit]
+        template = ~/.gitmessage
 [push]
 	default = simple
 [pull]
