@@ -6,6 +6,8 @@
 # $*                 --the list of directories to be added to the path
 # prepend_path()     --Merge two path-spec.s as a ":" separated list.
 #
+# Remarks:
+# TODO: cleanup old crufty definitions.
 
 #
 # dirs_not_in_path() --Return a path-spec of "new" path elements.
@@ -42,12 +44,12 @@ dirs_not_in_path()
 #
 prepend_path()
 {
-    local prefix=$(dirs_not_in_path "$@")
-    if [ "$1" -a "$prefix" ]; then
-	echo "$prefix:$1"
-    elif [ "$1" -o "$prefix" ]; then
-	echo "$prefix:$1"
+    local prefix prefix=$(dirs_not_in_path "$@")
+
+    if [ "$prefix" ]; then
+	printf "%s:" "$prefix"
     fi
+    printf "%s\n" "$1"
 }
 
 #
@@ -69,8 +71,8 @@ PATH=$(prepend_path "$sys_path" \
     /usr/local/*bin /usr/local/*/bin \
     /usr/local/opt/coreutils/libexec/gnubin \
     /Applications/MacPorts/*/Contents/MacOS/bin \
-    /opt/local/libexec/gnubin /opt/*/sbin /opt/*/bin /usr/*bin /*bin)
-
+    /opt/local/libexec/gnubin /opt/*/sbin /opt/*/bin /usr/*bin /*bin \
+    /opt/local/Library/Frameworks/Python.framework/Versions/*/bin)
 export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
     $HOME/local/lib /usr/local/lib /opt/local/lib \
     /usr/lib /usr/X11R6/lib)
@@ -145,7 +147,6 @@ export LS_COLORS='di=1:ln=36:pi=32:so=32:do=32:bd=1;35:cd=1;35'
        LS_COLORS="$LS_COLORS:tw=30;45:ow=31:st=35:ex=32"
 #       LS_COLORS="$LS_COLORS:*~=34:*.bak=34"
        LS_COLORS="$LS_COLORS:*~=38;05;8:*.bak=38;05;8"
-       LS_COLORS="$LS_COLORS:ec=\e[m"
 
 #
 # Define ANSI colours for logging with LOG_COLORS.
@@ -174,17 +175,16 @@ export WIRESHARK_APP_DIR=/Applications/Extras
 # development settings...
 #
 export EDITOR=vi
-export CC=gcc
+#export CC=gcc
 export DEVKIT_HOME=/usr/local
 export VCS=git
 export PERL5LIB=/usr/local/lib/perl5
 export PYTHONPATH=/usr/local/lib/python
 export RSYNC_RSH=ssh
 
-#export SVN_EDITOR=/usr/local/bin/svn-edit
+#export SVN_EDITOR=
 #export SVN_ROOT=svn+ssh://somehost/srv/svn
 #export SVN_ROOT=file://$HOME/svn
-export SVN_ROOT=https://subversion.alloratech.local:8443/svn/rep02
 
 #
 # X11 environment configuration, if any.
