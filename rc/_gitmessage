@@ -1,0 +1,21 @@
+# Conventional commit: e.g.:
+feat(x): adds feature to x.
+fix(database): capture and handle connection failures.
+style: reformats to std. form.
+doc: updates README with build instructions.
+#
+# <type>[optional scope]: <description-in-present-tense>
+#
+# * types: fix, feat, build, chore, ci, docs, style, perf, test.
+# * scope: affected module or component (optional)
+# * use "!" for breaking changes, and add a footer describing the break.
+#
+# e.g.
+# feat(api)!: adds more options to sort method(s).
+#
+# [optional body] 
+#
+# [optional footer(s)]
+#
+# BREAKING CHANGE: (e.g.) Uses unstable but faster sort.
+#
