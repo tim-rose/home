@@ -1,5 +1,5 @@
 prefix = $(HOME)
 language = sh
-SH_SRC = grep.sh open.sh
+SH_SRC = open.sh
 include devkit.mk
 install: install-all

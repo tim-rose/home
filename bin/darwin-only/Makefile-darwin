@@ -1,5 +1,5 @@
 prefix = $(HOME)
 language = sh
-SH_SRC = grep.sh set-font-smoothing.sh
+SH_SRC = set-font-smoothing.sh
 include makeshift.mk
 install: install-all
