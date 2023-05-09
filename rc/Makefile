@@ -2,7 +2,8 @@
 # Makefile --Build rules for "rc", home-directory config files.
 #
 override prefix = $(HOME)
-RC_SRC = _bashrc _emacs _gitconfig _gitignore _profile _vimrc
+RC_SRC = _bashrc _emacs _gitconfig _gitignore _gitmessage _profile \
+    _vimrc
 
 include makeshift.mk
 
