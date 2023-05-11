@@ -9,7 +9,6 @@
 # set_prompt() -- Customise the user prompt.
 #
 # Remarks:
-
 # This script sets up a fairly elaborate, colourful shell prompt that
 # displays various status indications in the prompt itself, and in the
 # terminal's window title.

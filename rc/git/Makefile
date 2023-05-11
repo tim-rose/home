@@ -1,12 +1,12 @@
 #
-# Makefile --Build rules for "sh", home-directory shell config files.
+# Makefile --Build rules for "rc", home-directory config files.
 #
 prefix = $(HOME)
 sysconfdir = $(HOME)
 
 language = sh
 
-RC_SRC = _aliasrc _bashrc _envrc _funcrc _profile
+RC_SRC = _gitconfig _gitignore _gitmessage
 
 include makeshift.mk
 

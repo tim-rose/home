@@ -7,6 +7,7 @@
 # if emacs isn't itself installed.
 #
 prefix = $(HOME)
+sysconfdir = $(HOME)
 emacsdir = $(rootdir)/.emacs.d/site-lisp
 ELISP_SRC = markdown-mode.el php-mode-improved.el
 

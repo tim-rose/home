@@ -2,10 +2,10 @@
 # Makefile --Build rules for "a2ps", customisations for the a2ps utility..
 #
 prefix = $(HOME)
+sysconfdir = $(HOME)/.a2ps
+
 SRC = a2psrc
 
 include makeshift.mk
 
-install:	$(SRC:%=$(rootdir)/.a2ps/%)
-
-$(rootdir)/.a2ps/%:	%;		$(INSTALL_FILE)	$? $@
+install:	$(SRC:%=$(sysconfdir)/%)

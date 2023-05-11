@@ -1,5 +1,5 @@
 #
-# Makefile --Build rules for "a2ps", customisations for the a2ps utility..
+# Makefile --Build rules for "vim", customisations for the vim editor.
 #
 prefix = $(HOME)
 vimdir = $(prefix)/.vim/colors
