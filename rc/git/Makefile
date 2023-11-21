@@ -6,7 +6,7 @@ sysconfdir = $(HOME)
 
 language = sh
 
-RC_SRC = _gitconfig _gitignore _gitmessage
+RC_SRC = _gitattributes _gitconfig _gitignore _gitmessage
 
 include makeshift.mk
 

@@ -8,7 +8,7 @@ some custom scripts.
 
 The files in here are *not* simply cloned into the HOME directory,
 they're installed via **make**(1), using the macros defined
-in [devkit](git@github.com:tim-rose/devkit.git), so you'll have to get
+in [devkit](git@github.com:tim-rose/makeshift.git), so you'll have to get
 and install that first.
 
 ### Midden

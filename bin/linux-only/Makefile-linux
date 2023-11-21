@@ -1,5 +1,5 @@
 prefix = $(HOME)
 language = sh
 SH_SRC = open.sh
-include devkit.mk
+include makeshift.mk
 install: install-all

@@ -1,3 +1,6 @@
+#
+# .GITCONFIG --Customisations to the git commands.
+#
 [user]
 	name = Tim Rose
 	email = tim.rose@acm.org
@@ -6,6 +9,7 @@
 [core]
 	quotepath = false
 	excludesfile = ~/.gitignore
+        attributesFile = ~/.gitattributes
 # windows... autocrlf = true
 	autocrlf = input
 	safecrlf = warn
@@ -22,6 +26,9 @@
 	ui = auto
 [diff]
 	tool=opendiff
+[diff "json"]
+        textconv = jq
+        cachetextconv = true
 [alias]
 	st = status -s
 	ci = commit

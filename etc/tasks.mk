@@ -1,12 +1,12 @@
 #
-# MAKEFILE --sample makefile for using devkit
+# MAKEFILE --sample makefile for using makeshift.
 #
 # Contents:
 # put:         --Push some data to a remote host using rsync.
 # get:         --Pull some data from a remote host using rsync.
 # home-dir-ok: --Check that the current directory is [a sub-directory of] home.
 #
-include devkit.mk
+include makeshift.mk
 
 get: var-defined[SYNC_HOST] get[$$SYNC_HOST]
 put: var-defined[SYNC_HOST] put[$$SYNC_HOST]
@@ -14,7 +14,7 @@ put: var-defined[SYNC_HOST] put[$$SYNC_HOST]
 #
 # put: --Push some data to a remote host using rsync.
 #
-put[%]:	home-dir-ok
+put[%]:	| home-dir-ok
 	@dir=$$(echo $$PWD | sed -e "s|^$$HOME/||"); \
 	echo "put: $$PWD -> $*:$$dir..."; \
 	ssh $* mkdir -p $$dir && \
@@ -24,7 +24,7 @@ put[%]:	home-dir-ok
 #
 # get: --Pull some data from a remote host using rsync.
 #
-get[%]:	home-dir-ok
+get[%]:	| home-dir-ok
 	@dir=$$(echo $$PWD | sed -e "s|^$$HOME/||"); \
 	echo "get: $*:$$dir -> $$PWD"; \
 	rsync -Cauvz $*:$$dir/ .
