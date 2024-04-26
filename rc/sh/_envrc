@@ -176,7 +176,7 @@ export WIRESHARK_APP_DIR=/Applications/Extras
 #
 export EDITOR=vi
 #export CC=gcc
-export DEVKIT_HOME=/usr/local
+export MAKESHIFT_HOME=/usr/local
 export VCS=git
 export PERL5LIB=/usr/local/lib/perl5
 export PYTHONPATH=/usr/local/lib/python

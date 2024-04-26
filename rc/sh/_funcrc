@@ -5,9 +5,6 @@ env()	{ command env | cat -v | sort; }
 path()  { eval "echo \${${1:-PATH}}" | tr ':' '\012';  }
 less4()	{ less -x4 $*; }
 
-make()  { command make -I $DEVKIT_HOME/include "$@"; }
-mk()    { command make -I $DEVKIT_HOME/include -f $HOME/etc/tasks.mk "$@"; }
-
 find0() { find "$@" -print0; }
 
 #
