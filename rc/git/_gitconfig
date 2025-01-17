@@ -6,16 +6,20 @@
 	email = tim.rose@acm.org
 [github]
 	user = tim-rose
+[includeIf "gitdir:~/Projects/other/"]
+	path = ~/.gitconfig@other
 [core]
 	quotepath = false
 	excludesfile = ~/.gitignore
-        attributesFile = ~/.gitattributes
+	attributesFile = ~/.gitattributes
 # windows... autocrlf = true
 	autocrlf = input
 	safecrlf = warn
 	eol = native
 [commit]
-        template = ~/.gitmessage
+	template = ~/.gitmessage
+[pager]
+	branch = false
 [push]
 	default = simple
 [pull]
@@ -27,22 +31,27 @@
 [diff]
 	tool=opendiff
 [diff "json"]
-        textconv = jq
-        cachetextconv = true
+	textconv = jq
+	cachetextconv = true
 [alias]
-	st = status -s
-	ci = commit
+	unstage = restore --staged
 	br = branch
+	cd = !cd $(git rev-parse --show-toplevel)
+	ci = commit
 	co = checkout
 	df = diff
 	lg = log -p
+	st = status -s
 	who = shortlog -s --
-        alias = !git config --list | sort | sed -ne \"/^alias/s/alias.\\([^=]*\\)=\\(.*\\)/\\1:$(printf '\\t')\\2/p\"
-        this = !git init && git add . && git commit -m \"Once upon a time there was a directory named '$(basename $PWD)'.\"
-        x  = commit -m
-        xa = commit -a -m
-        a = add
-        master = checkout master
-        h = log --graph --pretty='format:%C(bold)%h%C(cyan)%d%Creset %aD %Cgreen%an%Creset %s'
-        hr = log --graph --pretty='format:%C(bold)%h%C(cyan)%d%Creset %ar %Cgreen%an%Creset %s'
-        shbr = for-each-ref --format='%(refname:short) <- %(upstream:short)' refs/heads
+	a = add
+	alias = !git config --list | sort | \
+	sed -ne '/^alias/s/=/\t= /' -e '/^alias[.]/s/alias.//p' | grep -i --color \"$1\" "#"
+	h = log --graph --pretty='format:%C(bold)%h%C(cyan)%d%Creset %aD %Cgreen%an%Creset %s'
+	hr = log --graph --pretty='format:%C(bold)%h%C(cyan)%d%Creset %ar %Cgreen%an%Creset %s'
+	master = checkout master
+	shbr = for-each-ref --format='%(refname:short) <- %(upstream:short)' refs/heads
+	tags = tag --sort=taggerdate \
+	--format='%(color:cyan)%(refname:short)%(color:reset)\t%(subject) %(color:green)%(taggername)%(color:reset)	%(taggerdate)'
+	this = !git init && git add . && git commit -m \"Once upon a time there was a directory named '$(basename $PWD)'.\"
+	x  = commit -m
+	xa = commit -a -m
