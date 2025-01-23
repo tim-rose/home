@@ -1,3 +1,4 @@
+C_MAIN_SRC = benchmark.c
 #
 # Makefile --Build rules for "bin", personal commands etc.
 #
@@ -11,9 +12,9 @@ language = sh c
 C_SRC = benchmark.c
 SH_LINT_EXCLUDE += SC1091 SC2059
 
-SH_SRC = auto-ssh.sh cgrep.sh choose.sh cmpmv.sh colortest.sh db.sh \
-    dbls.sh lesspipe.sh mergedir.sh svn-viewdiff.sh trash.sh \
-    vcs.sh whichis.sh
+SH_SRC = auto-ssh.sh cgrep.sh choose.sh cmpmv.sh colortest.sh \
+    db.sh dbls.sh lesspipe.sh mergedir.sh svn-viewdiff.sh \
+    trash.sh vcs.sh
 SED_SRC = csv-to-html.sed
 
 include makeshift.mk
