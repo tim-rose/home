@@ -14,7 +14,7 @@
 # terminal's window title.
 #
 #date "+.bashrc: %c"
-umask 002
+umask 002               # permissions mask: rwxrwxr-x
 set -o ignoreeof	# ignore <CTRL d>, use exit to terminate ksh
 set -o emacs		# Set up in-line edit
 HISTCONTROL=ignoreboth		# bash history control
@@ -33,7 +33,7 @@ fi
 git_status()
 {
     git branch 2>/dev/null |
-	sed -ne 's/ detached at /@/' -e '/^[*]/s/^[*] */:/p'
+	sed -ne 's/ detached at /@/;/^[*]/s/^[*] */:/p'
 }
 
 #
@@ -175,7 +175,9 @@ unset set_prompt		# ...and lose it.
 #
 # load any further customisations from the etc directory, and bashrc-<host>
 #
-for file in $HOME/etc/sh/* $ENV-$HOSTNAME; do
+for file in \
+    $HOME/.envrc $HOME/.aliasrc $HOME/.funcrc $HOME/.ttyrc \
+    $HOME/etc/sh/* $ENV-$HOSTNAME; do
     if [ -e "$file" ]; then
 	. $file
     fi
