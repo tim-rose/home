@@ -4,7 +4,7 @@
 prefix = $(HOME)
 sysconfdir = $(HOME)/.a2ps
 
-SRC = a2psrc
+SRC = a2psrc bw.pro
 
 include makeshift.mk
 
