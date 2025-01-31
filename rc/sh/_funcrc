@@ -1,10 +1,30 @@
 #!/bin/sh
-# define function/aliases...
+# .FUNCRC() --Some useful shell functions.
+#
+# Contents:
+# env()         --Alter for sorted output and de-fang escape/unprintable characters.
+# path()        --Print the contents of PATH/$1 variable punctuated by newlines.
+# find0()       --Find but print with NUL terminators (for filenames containing space).
+# recursively() --Run a command on all files in this directory and subdirs.
+# quietly()     --Run a command, discarding stdout+stderr.
+# calc()        --Echo a calculation result.
+# maxlen()      --Calculate the maximum line length of stdin
+# pdfman()      --Open a man page as a PDF file.
+# tgrep()       --"table" grep; print the first (header) line, and matching others.
+#
+#
+# env() --Alter for sorted output and de-fang escape/unprintable characters.
 #
 env()	{ command env | cat -v | sort; }
-path()  { eval "echo \${${1:-PATH}}" | tr ':' '\012';  }
-less4()	{ less -x4 $*; }
 
+#
+# path() --Print the contents of PATH/$1 variable punctuated by newlines.
+#
+path()  { eval "echo \${${1:-PATH}}" | tr ':' '\012';  }
+
+#
+# find0() --Find but print with NUL terminators (for filenames containing space).
+#
 find0() { find "$@" -print0; }
 
 #
@@ -22,7 +42,7 @@ quietly() { "$@"; } >/dev/null 2>&1
 #
 calc() { echo "scale=2; $*" | bc; }
 #
-# maxlen() --Calculate the maximum line length of stdin
+# maxlen() --Calculate the maximum line length of stdin.
 #
 maxlen() { sed -e 's/./+1/g' -e 's/^/0/'| bc | sort -rn | head -1; }
 
@@ -37,5 +57,8 @@ pdfman() {
 
 #
 # tgrep() --"table" grep; print the first (header) line, and matching others.
+#
+# Remarks:
+# Useful for files/commands like ps(1)
 #
 tgrep() { local tag=$1; shift; cat "$@" |sed -ne1p -e "/$tag/p"; }
