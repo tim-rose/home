@@ -19,6 +19,7 @@
 dirs_not_in_path()
 {
     local path=":$1:"; shift
+    local dirs=''
 
     for dir in "$@"; do
 	case "$path" in
@@ -26,17 +27,12 @@ dirs_not_in_path()
 	    ;;		# already in the path
 	*)
 	    if [ -d "$dir" ]; then
-		echo $dir
+		dirs="$dirs:$dir"
 	    fi
 	    ;;
 	esac
-    done |
-    {					# echo ":" separated list of items
-	read d && printf '%s' "$d"
-	while read d; do
-	    printf ':%s' "$d"
-	done
-    }
+    done
+    echo ${dirs#:}      # trim initial ':'
 }
 
 #
@@ -44,12 +40,9 @@ dirs_not_in_path()
 #
 prepend_path()
 {
-    local prefix prefix=$(dirs_not_in_path "$@")
+    local path="$(dirs_not_in_path "$@"):$1"
 
-    if [ "$prefix" ]; then
-	printf "%s:" "$prefix"
-    fi
-    printf "%s\n" "$1"
+    echo "${path#:}"    # trim initial ':'
 }
 
 #
@@ -58,8 +51,8 @@ prepend_path()
 #
 sys_path="$PATH"
 PATH=/bin:/usr/bin
-export ENV_START="$(date '+.envrc: %c')"
-#echo $ENV_START >&2
+export SESSION_START="$(date '+.envrc: %c')"
+#echo $SESSION_START >&2
 
 export HOSTNAME=${HOSTNAME:-$(uname -n)}
 export ARCH=${ARCH:-$(uname -m|sed -e 's/i.86/i386/')}
@@ -71,7 +64,8 @@ PATH=$(prepend_path "$sys_path" \
     /usr/local/*bin /usr/local/*/bin \
     /usr/local/opt/coreutils/libexec/gnubin \
     /Applications/MacPorts/*/Contents/MacOS/bin \
-    /opt/local/libexec/gnubin /opt/*/sbin /opt/*/bin /usr/*bin /*bin \
+    /opt/local/libexec/gnubin /opt/*/sbin /opt/*/bin \
+    /usr/*bin /*bin /usr/games \
     /opt/local/Library/Frameworks/Python.framework/Versions/Current/bin)
 export LD_LIBRARY_PATH=$(prepend_path "$LD_LIBRARY_PATH" \
     $HOME/local/lib /usr/local/lib /opt/local/lib \
@@ -102,17 +96,11 @@ if [ -f $HOME/tmp ]; then
 fi
 
 #
-# Settings for paginated output with less(1):
-# Options:
-# -M --*really* long prompt
-# -i --ignore case
-# -R --raw-passthru for ansi "color" escape sequences (for stupid loggers)
-# -F --quit if one screen
-#
+# Settings for paginated output with less(1).
 # Also, if there's a lesspipe filter, setup to use it.
 #
 export PAGER=less
-export LESS=-MiR
+export LESS='--LONG_PROMPT --ignore-case --RAW-CONTROL-CHARS --use-color --quit-if-one-screen'
 if [ -x "$HOME/bin/lesspipe" ]; then
     export LESSOPEN="|$HOME/bin/lesspipe %s"
 fi
@@ -140,12 +128,11 @@ export LESS_TERMCAP_ue=$(printf '\033[m')
 # sticky              st=35        magenta
 # executable          ex=32        green
 #
-# backup files        *~=34        blue
+# backup files        *~=38;05;8   grey (256 colour)
 #
 export LS_COLORS='di=1:ln=36:pi=32:so=32:do=32:bd=1;35:cd=1;35'
-       LS_COLORS="$LS_COLORS:or=4;36:su=35:sg=35:ca=35"
+       LS_COLORS="$LS_COLORS:or=5;36:su=35:sg=35:ca=35"
        LS_COLORS="$LS_COLORS:tw=30;45:ow=31:st=35:ex=32"
-#       LS_COLORS="$LS_COLORS:*~=34:*.bak=34"
        LS_COLORS="$LS_COLORS:*~=38;05;8:*.bak=38;05;8"
 
 #
@@ -169,22 +156,17 @@ export LOG_COLORS='debug=36:notice=1:warning=1;33:err=1;31:crit=1;33;41:alert=1;
 export GREP_COLORS='mt=1;33:cx=2:fn=36'
 export ACK_OPTIONS="--color-match=cyan --color-filename=bold --color-lineno=yellow --nogroup"
 
-export WIRESHARK_APP_DIR=/Applications/Extras
-
 #
 # development settings...
 #
 export EDITOR=vi
 #export CC=gcc
 export MAKESHIFT_HOME=/usr/local
+export prefix=/usr/local
 export VCS=git
 export PERL5LIB=/usr/local/lib/perl5
 export PYTHONPATH=/usr/local/lib/python
 export RSYNC_RSH=ssh
-
-#export SVN_EDITOR=
-#export SVN_ROOT=svn+ssh://somehost/srv/svn
-#export SVN_ROOT=file://$HOME/svn
 
 #
 # X11 environment configuration, if any.

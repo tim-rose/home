@@ -8,7 +8,7 @@
 # recursively() --Run a command on all files in this directory and subdirs.
 # quietly()     --Run a command, discarding stdout+stderr.
 # calc()        --Echo a calculation result.
-# maxlen()      --Calculate the maximum line length of stdin
+# maxlen()      --Calculate the maximum line length of stdin.
 # pdfman()      --Open a man page as a PDF file.
 # tgrep()       --"table" grep; print the first (header) line, and matching others.
 #

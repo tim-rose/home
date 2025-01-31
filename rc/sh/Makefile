@@ -1,8 +1,8 @@
 #
 # Makefile --Build rules for "sh", home-directory shell config files.
 #
-prefix = $(HOME)
-sysconfdir = $(HOME)
+prefix ?= $(HOME)
+sysconfdir ?= $(HOME)
 
 language = sh
 
