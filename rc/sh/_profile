@@ -1,6 +1,9 @@
 #!/bin/sh
 # PROFILE --login commands.
 #
+# Contents:
+# load_file() --Load a file, with logging.
+#
 # Remarks:
 # The profile guesses at the shell, and sets up the "ENV" variable
 # appropriately (e.g. .shrc, .bashrc, .kshrc etc.)
@@ -8,9 +11,13 @@
 #  * Ubuntu lightdm-session ignores your login-shell, and runs it via /bin/sh
 #  * cygwin's ps command is broken, so we do a fallback to bash.
 #
-#date "+.profile: %c"
-export BASH_SILENCE_DEPRECATION_WARNING=1
-load_files()
+date "+# .profile: ${HOSTNAME:-unknown} %c" >&2
+export BASH_SILENCE_DEPRECATION_WARNING=1       # suppress suppress Darwin messages
+
+#
+# load_file() --Load a file, with logging.
+#
+load_file()
 {
     for file; do
 	case "$file" in
@@ -18,8 +25,8 @@ load_files()
 	    *) file=$HOME/$file;;
 	esac
 	if [ -e $file ]; then
-	    # printf "loading %s\n" "$file" >&2
-	    . $file
+	    printf "# loading %s\n" "$file" >&2
+	    builtin . $file
 	fi
     done
 }
@@ -27,8 +34,10 @@ load_files()
 shell=$(ps -o comm= $$ 2>/dev/null | sed -e 's/^-//') # guess current shell
 export ENV=${ENV:-$HOME/.${shell:-bash}rc}	# fallback to bash
 
-load_files .envrc .ttyrc .displayrc $ENV
-unset shell load_files
+alias .='load_file'
+load_file .ttyrc .displayrc $ENV
+unset shell load_file
+unalias .
 
 #
 # Gnome terminal seems a bit buggy wrt its cursor, which seems to
@@ -43,3 +52,5 @@ fi
 if [ $(uname -s) != 'Darwin' ]; then
     printf '\033]6;\007\033]7;\007' # disable apple-term's represented file stuff
 fi
+
+if type fortune 2>&1 >/dev/null; then fortune; fi
