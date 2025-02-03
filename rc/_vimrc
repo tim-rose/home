@@ -10,18 +10,15 @@ set shiftwidth=4			"indent/outdent by four columns
 set expandtab				"Convert all tabs typed to spaces
 
 set matchpairs+=<:>			"Allow % to bounce between "<", ">"
-"
-" template-insertion abbrev.s
-"
-iab papp :r /usr/local/share/template/main.pl
-iab pmod :r /usr/local/share/template/module.pm
 
-"
+if has("mouse")
+    set mouse=a
+
 " Syntax highlighting customisations.
-"
 set t_Co=256				" force "256 colour" mode
 syntax on
 :colorscheme custom
+
 " Show syntax highlighting groups for word under cursor
 nmap <C-S-P> :call <SID>SynStack()<CR>
 function! <SID>SynStack()
@@ -30,7 +27,4 @@ function! <SID>SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
-
-if has("mouse")
-    set mouse=a
 endif
