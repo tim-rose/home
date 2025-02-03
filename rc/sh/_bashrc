@@ -19,12 +19,10 @@ set -o ignoreeof	# ignore <CTRL d>, use exit to terminate ksh
 set -o emacs		# Set up in-line edit
 HISTCONTROL=ignoreboth		# bash history control
 
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
-
-if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
+if [ "$ENV" = 'bash' ]; then
+    if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+        . /etc/bash_completion
+    fi
 fi
 
 #
