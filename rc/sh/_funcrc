@@ -62,3 +62,13 @@ pdfman() {
 # Useful for files/commands like ps(1)
 #
 tgrep() { local tag=$1; shift; cat "$@" |sed -ne1p -e "/$tag/p"; }
+
+#
+# a2pdf() --Create a printable PDF file from a text file.
+#
+a2pdf()
+{
+    for file; do
+        a2ps -o "$file.ps" $file && ps2pdf "$file.ps" && rm -f "$file.ps"
+    done
+}
