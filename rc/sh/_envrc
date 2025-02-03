@@ -100,7 +100,7 @@ fi
 # Also, if there's a lesspipe filter, setup to use it.
 #
 export PAGER=less
-export LESS='--LONG_PROMPT --ignore-case --RAW-CONTROL-CHARS --use-color --quit-if-one-screen'
+export LESS='--LONG-PROMPT --ignore-case --RAW-CONTROL-CHARS --use-color --quit-if-one-screen'
 if [ -x "$HOME/bin/lesspipe" ]; then
     export LESSOPEN="|$HOME/bin/lesspipe %s"
 fi
