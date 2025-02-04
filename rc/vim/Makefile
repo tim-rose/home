@@ -2,7 +2,7 @@
 # Makefile --Build rules for "vim", customisations for the vim editor.
 #
 prefix = $(HOME)
-vimdir = $(prefix)/.vim/colors
+vimdir = $(DESTDIR)/$(prefix)/.vim/colors
 SRC = custom.vim
 
 include makeshift.mk

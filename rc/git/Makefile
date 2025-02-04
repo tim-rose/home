@@ -2,7 +2,7 @@
 # Makefile --Build rules for "rc", home-directory config files.
 #
 prefix = $(HOME)
-sysconfdir = $(HOME)
+sysconfdir = $(DESTDIR)/$(DESTDIR)/$(HOME)
 
 language = sh
 
