@@ -53,4 +53,4 @@ if [ $(uname -s) != 'Darwin' ]; then
     printf '\033]6;\007\033]7;\007' # disable apple-term's represented file stuff
 fi
 
-if type fortune 2>&1 >/dev/null; then fortune; fi
+if type fortune >/dev/null 2>&1; then fortune; fi
