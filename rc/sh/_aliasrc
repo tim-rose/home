@@ -1,15 +1,24 @@
 #
 # .ALIASRC --Some useful aliases.
 #
+# Contents:
+# grep:     --Make grep commands colourful by default.
+# ls:       --some variations on ls(1)
+# svn_xtd() --A helper to make "svn-xxxx" work like "svn xxxx".
+# cd:       --Some cd shortcuts.
+# vi:       --Some vi/vim conveniences.
+# which()   --An alias for which(1) that can operate on aliases.
+# shx:      --Print the SSH environment variables.
+#
 
 #
-# *grep(1) commands are colourful by default.
+# grep: --Make grep commands colourful by default.
 #
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 #
-# some variations on ls(1)
+# ls: --some variations on ls(1)
 #
 alias l.='ls -d .* --color=auto'
 alias ll='ls -l --color=auto'
@@ -19,10 +28,16 @@ alias ls='ls --color=auto'
 # svn_xtd() --A helper to make "svn-xxxx" work like "svn xxxx".
 # (Needs svn-extras package to work.)
 #
-alias svn='svn_xtd'
-
+if type svn_xtd >/dev/null 2>&1; then
+    alias svn='svn_xtd'
+fi
 #
-# Some vi/vim conveniences.
+# cd: --Some cd shortcuts.
+#
+alias gcd='cd "$(git rev-parse --show-toplevel)" && echo $PWD >&2'
+alias ..='cd .. && pwd'
+#
+# vi: --Some vi/vim conveniences.
 #
 alias vi='vim'
 alias :e=vim
@@ -30,7 +45,12 @@ alias :q='echo "Use "logout" to leave the shell."'
 
 alias mnt="mount | awk -F' ' '{ printf \"%s\t%s\n\",\$1,\$3; }' | column -t | egrep ^/dev/ | sort"
 alias cpv='rsync -ah --info=progress2'
-alias ..='cd .. && pwd'
-
-# An alias for which that can operate on aliases.
+alias eol="sed -i -e 's/  *$//'"        # cleanup trailing spaces
+#
+# which() --An alias for which(1) that can operate on aliases.
+#
 alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
+#
+# shx: --Print the SSH environment variables.
+#
+alias shx='env | sed -ne "/^SSH/s/^/export /"p'
