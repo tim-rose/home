@@ -56,7 +56,7 @@ export SESSION_START="$(date '+.envrc: %c')"
 
 export HOSTNAME=${HOSTNAME:-$(uname -n)}
 export ARCH=${ARCH:-$(uname -m|sed -e 's/i.86/i386/')}
-export OS=${OS:-$(uname -s | tr A-Z a-z | sed -e 's/-[.0-9]*//')}
+export OS=${OS:-$(uname -s | tr A-Z a-z | sed -e 's/-[-.0-9]*$//')}
 
 PATH=$(prepend_path "$sys_path" \
     . $HOME/bin $HOME/bin/$OS-$ARCH \
