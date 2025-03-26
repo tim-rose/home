@@ -11,6 +11,7 @@
 # maxlen()      --Calculate the maximum line length of stdin.
 # pdfman()      --Open a man page as a PDF file.
 # tgrep()       --"table" grep; print the first (header) line, and matching others.
+# a2pdf()       --Create a printable PDF file from a text file.
 #
 #
 # env() --Alter for sorted output and de-fang escape/unprintable characters.

@@ -19,12 +19,6 @@ set -o ignoreeof	# ignore <CTRL d>, use exit to terminate ksh
 set -o emacs		# Set up in-line edit
 HISTCONTROL=ignoreboth		# bash history control
 
-if [ "$ENV" = 'bash' ]; then
-    if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-        . /etc/bash_completion
-    fi
-fi
-
 #
 # git_status() --Show the current git branch, if any.
 #
@@ -50,7 +44,7 @@ job_status()
     local jobs=$(jobs | wc -l)
 
     if [ "$jobs" -ne 0 ]; then
-	printf '+%d' "$jobs"
+        printf '+%d' "$jobs"
     fi
 }
 
@@ -60,17 +54,29 @@ job_status()
 # Output:
 # The text indication (and count) of background jobs.
 #
-dir_status()
-{
-    local dirs=$(dirs -p | wc -l)
+# Remarks:
+# Not all shells implement a directory stack, so this creates
+# a NOP fallback function in such cases.
+#
+dir_status() { :; }             # fallback
+if type dirs >/dev/null 2>&1; then
+    dir_status()
+    {
+        local dirs=$(dirs -p | wc -l)
 
-    if [ "$dirs" -ne 1 ]; then
-	printf '/%d' "$dirs"
-    fi
-}
+        if [ "$dirs" -ne 1 ]; then
+            printf '/%d' "$dirs"
+        fi
+    }
+fi
 
 #
 # cmd_status() --Print the status of the previous command, if it failed.
+#
+# Remarks:
+# Unix process exit status is a 16-bit word comprising two bytes:
+# * the status value set by calling exit(3)
+# * the signal sent to the process that caused its exit (if any)
 #
 cmd_status()
 {
@@ -92,7 +98,7 @@ cmd_status()
 	    if ! signal_name=$(kill -l $signal 2>/dev/null); then
 		signal_name="unknown signal"
 	    fi
-	    reason="caught signal: $signal ($signal_name)"
+	    reason="received signal: $signal ($signal_name)"
 	    ;;
 	esac
     fi
@@ -108,7 +114,8 @@ cmd_status()
 # pasted for re-execution.  The prompt colour indicates whether
 # the session is local/remote, and "privileged" (i.e. root).
 #
-# Note: this function is removed after it is used.
+# Note: this function is removed after it is used.  The dynamic
+# aspects of the prompt are delegated to various status functions.
 #
 # REVISIT: disable apple-term's "represented file" stuff?:
 # \033]6;document-url\007
@@ -140,7 +147,7 @@ set_prompt()
 	sh_level=":$SHLVL"
     fi
     #
-    # terminal customisation: if supported:
+    # terminal-specific customisation: if supported:
     #  * show user, host, directory and project in title bar
     #  * show VCS status/info
     #  * show shell level
@@ -165,6 +172,12 @@ set_prompt()
 	    PS2=': > '
 	    ;;
     esac
+
+    # Add Windows Terminal integration: special codes that mark the
+    # start/end/status of commands and prompt.
+    if systemd-detect-virt | grep -sq wsl; then
+        PS1="\[\e]133;\$?D;\a\]\[\e]133;A;\a\]$PS1\[\e]133;B;\a\]"
+    fi
 }
 
 set_prompt			# use it
@@ -180,3 +193,12 @@ for file in \
 	. $file
     fi
 done
+
+#
+# if compgen is supported load the completions.
+#
+if type compgen >/dev/null 2>&1; then
+    if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+        . /etc/bash_completion
+    fi
+fi
